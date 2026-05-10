@@ -75,6 +75,21 @@ export function Accomplishments() {
   const { berkeley, citrushack, industry } = ACCOMPLISHMENTS;
   const { broaderAdmits } = berkeley;
 
+  // Constellation: RCC at center, schools radiating outward.
+  // Berkeley anchors the top (the headliner); the four broader admits orbit.
+  const constellationNodes: Array<LogoSlot & {
+    leftPct: number;
+    topPct: number;
+    sizePct: number;
+    anchor?: boolean;
+  }> = [
+    { ...berkeley.schoolLogo, leftPct: 50, topPct: 14, sizePct: 26, anchor: true },
+    { ...broaderAdmits.schools[0], leftPct: 86, topPct: 40, sizePct: 22 },
+    { ...broaderAdmits.schools[1], leftPct: 76, topPct: 82, sizePct: 22 },
+    { ...broaderAdmits.schools[2], leftPct: 24, topPct: 82, sizePct: 22 },
+    { ...broaderAdmits.schools[3], leftPct: 14, topPct: 40, sizePct: 22 },
+  ];
+
   useGSAP(
     () => {
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -84,8 +99,21 @@ export function Accomplishments() {
       gsap.set(".js-acc-berkeley-logo", { autoAlpha: 0, scale: 0.9 });
       gsap.set(".js-acc-eecs", { autoAlpha: 0, y: 12 });
       gsap.set(".js-acc-broader", { autoAlpha: 0, y: 14 });
-      gsap.set(".js-acc-admit-tile", { autoAlpha: 0, y: 12, scale: 0.94 });
-      gsap.set(".js-acc-photo", { autoAlpha: 0, scale: 1.04 });
+      // Constellation initial states
+      gsap.set(".js-acc-cline", { strokeDashoffset: 100 });
+      gsap.set(".js-acc-cnode", { autoAlpha: 0, scale: 0.55 });
+      gsap.set(".js-acc-ccenter", { autoAlpha: 0, scale: 0 });
+      gsap.set(".js-acc-cpulse", { autoAlpha: 0, attr: { r: 28 } });
+      // Photo + stamp + dust
+      gsap.set(".js-acc-photo", { autoAlpha: 0 });
+      gsap.set(".js-acc-photo-img", { scale: 1.08 });
+      gsap.set(".js-acc-stamp", {
+        autoAlpha: 0,
+        scale: 0.2,
+        rotate: -55,
+        transformOrigin: "50% 50%",
+      });
+      gsap.set(".js-acc-dust-bit", { autoAlpha: 0, scale: 0.4, x: 0, y: 0 });
       gsap.set(".js-acc-firstplace", { autoAlpha: 0, scale: 0.6, rotate: -12 });
       gsap.set(".js-acc-vs-tile", { autoAlpha: 0, y: 18, scale: 0.94 });
       gsap.set(".js-acc-strike", { scaleX: 0, transformOrigin: "left center" });
@@ -152,15 +180,47 @@ export function Accomplishments() {
             ease: "power3.out",
             delay: reduced ? 0 : 1.0,
           });
-          gsap.to(".js-acc-admit-tile", {
+
+          // Constellation: center pulses in, lines draw outward, school nodes pop.
+          gsap.to(".js-acc-ccenter", {
             autoAlpha: 1,
-            y: 0,
             scale: 1,
-            duration: reduced ? 0.01 : 0.5,
-            stagger: reduced ? 0 : 0.08,
-            ease: "back.out(1.4)",
-            delay: reduced ? 0 : 1.15,
+            duration: reduced ? 0.01 : 0.55,
+            ease: "back.out(2.2)",
+            delay: reduced ? 0 : 1.25,
           });
+          gsap.to(".js-acc-cline", {
+            strokeDashoffset: 0,
+            duration: reduced ? 0.01 : 0.7,
+            ease: "power2.out",
+            stagger: reduced ? 0 : 0.08,
+            delay: reduced ? 0 : 1.45,
+          });
+          gsap.to(".js-acc-cnode", {
+            autoAlpha: 1,
+            scale: 1,
+            duration: reduced ? 0.01 : 0.55,
+            ease: "back.out(1.6)",
+            stagger: reduced ? 0 : 0.07,
+            delay: reduced ? 0 : 1.7,
+          });
+
+          // Continuous sonar — three rings rippling outward from RCC core.
+          if (!reduced) {
+            gsap.fromTo(
+              ".js-acc-cpulse",
+              { autoAlpha: 0.55, attr: { r: 28 } },
+              {
+                autoAlpha: 0,
+                attr: { r: 78 },
+                duration: 2.4,
+                repeat: -1,
+                stagger: 0.8,
+                ease: "power2.out",
+                delay: 2.4,
+              },
+            );
+          }
         },
       });
 
@@ -173,10 +233,71 @@ export function Accomplishments() {
           const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
           tl.to(".js-acc-photo", {
             autoAlpha: 1,
-            scale: 1,
             duration: reduced ? 0.01 : 0.9,
             ease: "power3.out",
           })
+            // Ken Burns settle — slight push-in at entry.
+            .to(
+              ".js-acc-photo-img",
+              {
+                scale: 1.0,
+                duration: reduced ? 0.01 : 1.6,
+                ease: "power3.out",
+              },
+              "<",
+            )
+            // Stamp impacts onto the photo with rotation settle.
+            .to(
+              ".js-acc-stamp",
+              {
+                autoAlpha: 1,
+                scale: 1,
+                rotate: -8,
+                duration: reduced ? 0.01 : 0.55,
+                ease: "back.out(2.6)",
+              },
+              "<+0.5",
+            )
+            // Dust burst on impact.
+            .add(() => {
+              if (reduced) return;
+              const bits = gsap.utils.toArray<SVGCircleElement>(".js-acc-dust-bit");
+              bits.forEach((bit, i) => {
+                const angle = (i / bits.length) * Math.PI * 2 - Math.PI / 2;
+                const dist = 28 + (i % 3) * 6;
+                gsap.fromTo(
+                  bit,
+                  { x: 0, y: 0, autoAlpha: 0, scale: 0.4 },
+                  {
+                    x: Math.cos(angle) * dist,
+                    y: Math.sin(angle) * dist,
+                    autoAlpha: 0.95,
+                    scale: 1,
+                    duration: 0.35,
+                    ease: "power2.out",
+                    onComplete: () => {
+                      gsap.to(bit, {
+                        autoAlpha: 0,
+                        scale: 0.5,
+                        duration: 0.45,
+                        ease: "power2.in",
+                      });
+                    },
+                  },
+                );
+              });
+            }, "<+0.05")
+            // Ken Burns continuous breathing — slow zoom oscillation.
+            .add(() => {
+              if (reduced) return;
+              gsap.to(".js-acc-photo-img", {
+                scale: 1.04,
+                duration: 7,
+                ease: "sine.inOut",
+                yoyo: true,
+                repeat: -1,
+              });
+            })
             .to(".js-acc-firstplace", {
             autoAlpha: 1,
             scale: 1,
@@ -357,14 +478,110 @@ export function Accomplishments() {
             <p className="mt-2 text-sm leading-relaxed text-gdg-ink/80">
               {broaderAdmits.detail}
             </p>
-            <div className="mt-4 grid grid-cols-4 gap-2">
-              {broaderAdmits.schools.map((s) => (
-                <div key={s.name} className="js-acc-admit-tile">
-                  <LogoTile slot={s} onWhite />
+
+            {/* Constellation — RCC at center, schools radiating outward.
+                Sonar pulses ripple from the core; lines draw on enter. */}
+            <div className="js-acc-constellation relative mx-auto mt-5 h-[280px] w-full max-w-[360px]">
+              <svg
+                className="absolute inset-0 h-full w-full"
+                viewBox="0 0 360 280"
+                preserveAspectRatio="none"
+                aria-hidden
+              >
+                <circle
+                  className="js-acc-cpulse"
+                  cx="180"
+                  cy="140"
+                  r="28"
+                  fill="none"
+                  stroke="#4285F4"
+                  strokeWidth="1.5"
+                />
+                <circle
+                  className="js-acc-cpulse"
+                  cx="180"
+                  cy="140"
+                  r="28"
+                  fill="none"
+                  stroke="#FBBC04"
+                  strokeWidth="1.5"
+                />
+                <circle
+                  className="js-acc-cpulse"
+                  cx="180"
+                  cy="140"
+                  r="28"
+                  fill="none"
+                  stroke="#34A853"
+                  strokeWidth="1.5"
+                />
+                {constellationNodes.map((n) => {
+                  const x2 = (n.leftPct / 100) * 360;
+                  const y2 = (n.topPct / 100) * 280;
+                  return (
+                    <line
+                      key={`cline-${n.name}`}
+                      className="js-acc-cline"
+                      x1={180}
+                      y1={140}
+                      x2={x2}
+                      y2={y2}
+                      stroke={ACCENT_HEX[n.accent]}
+                      strokeWidth="1.75"
+                      strokeLinecap="round"
+                      pathLength={100}
+                      strokeDasharray="100"
+                      opacity={0.75}
+                    />
+                  );
+                })}
+              </svg>
+
+              {/* RCC core */}
+              <div className="js-acc-ccenter absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                <div
+                  className="relative flex h-14 w-14 items-center justify-center rounded-full shadow-lift"
+                  style={{
+                    background:
+                      "conic-gradient(from 0deg, #4285F4, #EA4335, #FBBC04, #34A853, #4285F4)",
+                  }}
+                >
+                  <div className="flex h-11 w-11 flex-col items-center justify-center rounded-full bg-gdg-ink">
+                    <span className="font-display text-[10px] font-bold leading-none text-white">
+                      RCC
+                    </span>
+                    <span className="mt-0.5 font-mono text-[6px] uppercase tracking-[0.12em] text-white/70">
+                      GDG
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* School nodes */}
+              {constellationNodes.map((n) => (
+                <div
+                  key={n.name}
+                  className="js-acc-cnode absolute -translate-x-1/2 -translate-y-1/2"
+                  style={{
+                    left: `${n.leftPct}%`,
+                    top: `${n.topPct}%`,
+                    width: `${n.sizePct}%`,
+                  }}
+                >
+                  <LogoTile
+                    slot={n}
+                    onWhite
+                    className={
+                      n.anchor
+                        ? "ring-2 ring-gdg-yellow ring-offset-2 ring-offset-white"
+                        : ""
+                    }
+                  />
                 </div>
               ))}
             </div>
-            <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-gdg-mute">
+
+            <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-gdg-mute">
               Sub-10% target-major admits · class of 2026
             </p>
           </div>
@@ -383,7 +600,7 @@ export function Accomplishments() {
             <img
               src={`${BASE}${citrushack.photo}`}
               alt={citrushack.photoAlt}
-              className="absolute inset-0 h-full w-full object-cover"
+              className="js-acc-photo-img absolute inset-0 h-full w-full object-cover"
               loading="lazy"
             />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 via-black/20 to-transparent px-3 py-2">
@@ -391,6 +608,99 @@ export function Accomplishments() {
                 Photo · {citrushack.photoCredit}
               </span>
             </div>
+
+            {/* Championship stamp — impacts onto the photo with rotation settle. */}
+            <svg
+              className="js-acc-stamp pointer-events-none absolute right-3 top-3"
+              width="88"
+              height="88"
+              viewBox="0 0 88 88"
+              aria-hidden
+              style={{ filter: "drop-shadow(0 6px 14px rgba(0,0,0,0.35))" }}
+            >
+              <circle cx="44" cy="44" r="42" fill="#FBBC04" opacity="0.18" />
+              <circle cx="44" cy="44" r="38" fill="#EA4335" />
+              <circle
+                cx="44"
+                cy="44"
+                r="38"
+                fill="none"
+                stroke="#FBBC04"
+                strokeWidth="2"
+              />
+              <circle
+                cx="44"
+                cy="44"
+                r="30"
+                fill="none"
+                stroke="#FBBC04"
+                strokeWidth="0.8"
+                opacity="0.55"
+              />
+              <text
+                x="14"
+                y="49"
+                textAnchor="middle"
+                fill="#FBBC04"
+                fontSize="11"
+                fontWeight="700"
+              >
+                ★
+              </text>
+              <text
+                x="74"
+                y="49"
+                textAnchor="middle"
+                fill="#FBBC04"
+                fontSize="11"
+                fontWeight="700"
+              >
+                ★
+              </text>
+              <text
+                x="44"
+                y="42"
+                textAnchor="middle"
+                fill="#FFFFFF"
+                fontFamily="Google Sans, sans-serif"
+                fontWeight="800"
+                fontSize="20"
+                letterSpacing="-0.5"
+              >
+                1ST
+              </text>
+              <text
+                x="44"
+                y="58"
+                textAnchor="middle"
+                fill="#FBBC04"
+                fontFamily="Roboto Mono, monospace"
+                fontSize="6.5"
+                letterSpacing="2"
+              >
+                OVERALL
+              </text>
+            </svg>
+
+            {/* Dust burst — particles fly outward from the impact point. */}
+            <svg
+              className="pointer-events-none absolute right-3 top-3"
+              width="88"
+              height="88"
+              viewBox="0 0 88 88"
+              aria-hidden
+            >
+              {Array.from({ length: 12 }).map((_, i) => (
+                <circle
+                  key={i}
+                  className="js-acc-dust-bit"
+                  cx="44"
+                  cy="44"
+                  r={1.4 + (i % 3) * 0.7}
+                  fill="#FBBC04"
+                />
+              ))}
+            </svg>
           </div>
 
           <div className="mt-4 flex flex-wrap items-end gap-4">
