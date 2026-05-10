@@ -34,7 +34,3 @@ button {
     animation-iteration-count: 1 !important;
   }
 }
-
-.scroll-smooth-snap {
-  scroll-behavior: smooth;
-}

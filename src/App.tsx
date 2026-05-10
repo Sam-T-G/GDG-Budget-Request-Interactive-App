@@ -30,7 +30,7 @@ const PROGRAM_MARQUEE = [
 
 export default function App() {
   return (
-    <div className="relative min-h-screen scroll-smooth-snap">
+    <div className="relative min-h-screen">
       <main id="hero" className="pb-24">
         <Hero />
         <Marquee items={STATS_MARQUEE} bgClassName="bg-gdg-ink" textClassName="text-white" />

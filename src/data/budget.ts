@@ -163,10 +163,10 @@ export const ACCOMPLISHMENTS = {
       accent: "blue",
     } as LogoSlot,
     broaderAdmits: {
-      eyebrow: "And the broader admit map",
-      lede: "Berkeley is the headline. The pattern is wider.",
+      eyebrow: "Beyond Berkeley",
+      lede: "The three Berkeley seats are committed. Other members got in elsewhere.",
       detail:
-        "The three Berkeley seats are confirmed commits. Beyond them, GDG members earned acceptances at UCLA, USC, UCSD, and UC Irvine — many into target majors with sub-10% admit rates. A community-college pipeline, holding its own against the most selective programs in the state.",
+        "GDG members also earned admits to UCLA, USC, UCSD, and UC Irvine — several into majors with under 10% acceptance rates. Community college students, getting into the same programs as anyone else.",
       schools: [
         { name: "UCLA", file: "ucla.svg", short: "UCLA", accent: "blue" },
         { name: "USC", file: "usc.svg", short: "USC", accent: "red" },

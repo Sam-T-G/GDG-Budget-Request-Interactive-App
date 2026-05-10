@@ -54,7 +54,6 @@ export function WhatIsGDG() {
   const root = useRef<HTMLDivElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
   const countriesRef = useRef<HTMLSpanElement>(null);
-  const pinScopeRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -155,44 +154,6 @@ export function WhatIsGDG() {
       }
     },
     { scope: root },
-  );
-
-  // Pinned-scroll moment: pillars cross-fade through as user scrolls
-  useGSAP(
-    () => {
-      const scope = pinScopeRef.current;
-      if (!scope) return;
-      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      // On small screens or reduced motion, skip pinning to avoid iOS Safari jank
-      const supportsPin = window.matchMedia("(min-width: 480px) and (min-height: 640px)").matches;
-      if (reduced || !supportsPin) return;
-
-      const pillars = scope.querySelectorAll<HTMLDivElement>(".js-pillar-pin");
-      if (pillars.length === 0) return;
-
-      gsap.set(pillars, { autoAlpha: 0, y: 20 });
-      gsap.set(pillars[0], { autoAlpha: 1, y: 0 });
-
-      const stages = pillars.length;
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: scope,
-          start: "top top",
-          end: `+=${stages * 100}%`,
-          pin: true,
-          scrub: 0.4,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      pillars.forEach((p, i) => {
-        if (i === 0) return;
-        tl.to(pillars[i - 1], { autoAlpha: 0, y: -20, duration: 0.5 }, i)
-          .to(p, { autoAlpha: 1, y: 0, duration: 0.5 }, i);
-      });
-    },
-    { scope: pinScopeRef },
   );
 
   return (
@@ -336,30 +297,6 @@ export function WhatIsGDG() {
             </div>
           </div>
 
-          {/* Pinned cross-fade moment — separate scope, only fires on larger viewports.
-              Outer is h-screen so the layout box matches the pinned visual; without
-              this match the pin spacer and sibling sections overlap on release. */}
-          <div ref={pinScopeRef} className="relative mt-10 hidden h-screen sm:block">
-            <div className="flex h-full items-center justify-center">
-              <div className="relative h-[18rem] w-full max-w-md">
-                {GDG_PILLARS.map((p) => (
-                  <div
-                    key={p.title}
-                    className="js-pillar-pin absolute inset-0 flex flex-col justify-center rounded-3xl bg-white p-8 shadow-lift"
-                    style={{ opacity: 0 }}
-                  >
-                    <p className={`font-mono text-[11px] uppercase tracking-[0.2em] ${PILLAR_TEXT[p.color]}`}>
-                      {p.title}
-                    </p>
-                    <p className="mt-3 font-display text-3xl font-bold leading-tight tracking-tight text-gdg-ink">
-                      {p.body}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
           <div className="mt-8 rounded-2xl border border-gdg-line bg-white px-5 py-4">
             <p className="font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-gdg-mute">
               GDG on Campus
@@ -386,12 +323,12 @@ export function WhatIsGDG() {
                 />
               }
             />
-            <div className="relative -mt-10 px-5 pb-5">
+            <div className="relative -mt-10 px-5 pb-6 pt-2">
               <div className="inline-flex items-center gap-2 rounded-full bg-white/95 px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-gdg-ink shadow-soft">
                 <span className="inline-block h-2 w-2 rounded-full bg-gdg-green" />
                 {RCC_CHAPTER.established}
               </div>
-              <h3 className="mt-3 font-display text-xl font-bold leading-tight tracking-tight text-white">
+              <h3 className="mt-7 font-display text-xl font-bold leading-tight tracking-tight text-white">
                 {RCC_CHAPTER.fullName}
               </h3>
               <p className="mt-1 text-sm text-white/75">
