@@ -84,18 +84,32 @@ export function SplitTitle({
     { scope: root, dependencies: [text, immediate, flavor] },
   );
 
+  // Split into words + whitespace runs. Words become atomic
+  // `inline-block whitespace-nowrap` containers so the browser can never break
+  // mid-word; whitespace stays as real text nodes so breaks happen at spaces.
+  const segments = text.split(/(\s+)/);
+
   return (
     <Tag ref={root as React.RefObject<HTMLElement>} className={className} style={style}>
-      {Array.from(text).map((ch, i) => (
-        <span
-          key={i}
-          className="js-char inline-block"
-          aria-hidden={ch === " " ? undefined : true}
-          style={{ whiteSpace: ch === " " ? "pre" : undefined }}
-        >
-          {ch}
-        </span>
-      ))}
+      {segments.map((seg, si) => {
+        if (seg === "") return null;
+        if (/^\s+$/.test(seg)) {
+          return (
+            <span key={si} aria-hidden style={{ whiteSpace: "pre" }}>
+              {seg}
+            </span>
+          );
+        }
+        return (
+          <span key={si} className="inline-block whitespace-nowrap" aria-hidden>
+            {Array.from(seg).map((ch, ci) => (
+              <span key={ci} className="js-char inline-block">
+                {ch}
+              </span>
+            ))}
+          </span>
+        );
+      })}
       <span className="sr-only">{text}</span>
     </Tag>
   );

@@ -18,23 +18,55 @@ const SECTION_IDS = [
 
 /**
  * Document-spanning ribbon. The path is drawn progressively bound to scroll
- * progress. A "comet" head sits at the current draw tip, glowing in proportion
- * to scroll velocity. Each section emits a ripple from the comet as it enters
- * view, so the ribbon's energy hands off into the section.
+ * progress with a heavy scrub for "lag" feel. A comet head sits at the current
+ * draw tip, glowing in proportion to scroll velocity. Each section emits a
+ * ripple from the comet as it enters view.
+ *
+ * Sits at z-0 — behind every section/card. Visible in the gaps where
+ * section content is transparent.
  */
 export function GlobalRibbon() {
   const root = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
+  const echoRef = useRef<SVGPathElement>(null);
   const cometRef = useRef<SVGGElement>(null);
   const glowRef = useRef<SVGCircleElement>(null);
   const rippleRef = useRef<SVGCircleElement>(null);
 
-  // Build / rebuild the document-tall path whenever the body resizes
-  // (line-item accordions expand, fonts settle, etc.).
+  // Path with distinct movement zones — fast dives, horizontal sweeps,
+  // long lazy stretches, and sharp pivots so momentum feels varied.
+  const buildPath = (w: number, h: number) => {
+    const L = w * 0.08;
+    const M = w * 0.5;
+    const R = w * 0.92;
+    return [
+      `M ${M} 0`,
+      // dive right and bounce
+      `C ${R * 1.1} ${h * 0.02}, ${R * 1.15} ${h * 0.05}, ${R} ${h * 0.08}`,
+      // hard sweep left across viewport
+      `C ${R * 0.5} ${h * 0.1}, ${L * 0.3} ${h * 0.12}, ${L} ${h * 0.15}`,
+      // arc back to far right (loop-back pivot)
+      `C ${L * 0.2} ${h * 0.2}, ${R * 1.2} ${h * 0.21}, ${R * 0.88} ${h * 0.25}`,
+      // cascade down + drift left
+      `C ${R * 0.5} ${h * 0.3}, ${R * 0.35} ${h * 0.34}, ${L * 1.4} ${h * 0.38}`,
+      // long horizontal lag — nearly flat right
+      `C ${L * 0.4} ${h * 0.4}, ${R * 1.1} ${h * 0.43}, ${R * 0.92} ${h * 0.48}`,
+      // diagonal swing down-left with momentum
+      `C ${R * 0.4} ${h * 0.54}, ${L * 0.5} ${h * 0.56}, ${L * 0.55} ${h * 0.62}`,
+      // bounce hard right
+      `C ${L * 1.6} ${h * 0.67}, ${R * 1.15} ${h * 0.65}, ${R * 0.72} ${h * 0.72}`,
+      // settle leftward
+      `C ${R * 0.3} ${h * 0.78}, ${L * 0.4} ${h * 0.82}, ${L * 0.8} ${h * 0.86}`,
+      // final swoop home to center-bottom
+      `C ${L * 1.9} ${h * 0.93}, ${R * 0.8} ${h * 0.96}, ${M} ${h - 4}`,
+    ].join(" ");
+  };
+
   useEffect(() => {
     const update = () => {
       const path = pathRef.current;
+      const echo = echoRef.current;
       const svg = svgRef.current;
       const wrap = root.current;
       if (!path || !svg || !wrap) return;
@@ -45,21 +77,9 @@ export function GlobalRibbon() {
       svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
       wrap.style.height = `${h}px`;
 
-      // Snake path from top → bottom, weaving across viewport width.
-      const left = w * 0.12;
-      const right = w * 0.88;
-      const center = w * 0.5;
-
-      const d = [
-        `M ${center} 0`,
-        `C ${right} ${h * 0.05}, ${left} ${h * 0.13}, ${right * 0.9} ${h * 0.21}`,
-        `S ${left * 1.5} ${h * 0.34}, ${right * 0.95} ${h * 0.43}`,
-        `S ${left * 1.1} ${h * 0.55}, ${right * 0.7} ${h * 0.62}`,
-        `S ${left} ${h * 0.74}, ${right * 0.88} ${h * 0.82}`,
-        `S ${left * 1.6} ${h * 0.92}, ${center} ${h - 4}`,
-      ].join(" ");
-
+      const d = buildPath(w, h);
       path.setAttribute("d", d);
+      echo?.setAttribute("d", d);
       const len = path.getTotalLength();
       path.style.strokeDasharray = `${len} ${len}`;
       path.dataset.length = String(len);
@@ -87,6 +107,7 @@ export function GlobalRibbon() {
   useGSAP(
     () => {
       const path = pathRef.current;
+      const echo = echoRef.current;
       const comet = cometRef.current;
       const glow = glowRef.current;
       const ripple = rippleRef.current;
@@ -94,19 +115,18 @@ export function GlobalRibbon() {
 
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      // Wait one frame so the path has its `d` set before measuring.
       requestAnimationFrame(() => {
         const lenAttr = path.dataset.length;
         const totalLen = lenAttr ? parseFloat(lenAttr) : path.getTotalLength();
 
         if (reduced) {
           path.style.strokeDashoffset = "0";
+          if (echo) echo.style.opacity = "0.18";
           const tip = path.getPointAtLength(totalLen);
           comet.setAttribute("transform", `translate(${tip.x}, ${tip.y})`);
           return;
         }
 
-        // Initial: nothing drawn, comet at start.
         path.style.strokeDashoffset = String(totalLen);
         const start = path.getPointAtLength(0.1);
         comet.setAttribute("transform", `translate(${start.x}, ${start.y})`);
@@ -114,7 +134,9 @@ export function GlobalRibbon() {
         ScrollTrigger.create({
           start: 0,
           end: "max",
-          scrub: 0.6,
+          // Heavier scrub so the ribbon "lags behind" the user's scroll —
+          // momentum feels physical, not painted on.
+          scrub: 1.1,
           onUpdate: (self) => {
             const len = parseFloat(path.dataset.length || "0") || path.getTotalLength();
             const drawn = len * self.progress;
@@ -124,29 +146,25 @@ export function GlobalRibbon() {
             const point = path.getPointAtLength(safe);
             comet.setAttribute("transform", `translate(${point.x}, ${point.y})`);
 
-            // Glow scales with absolute scroll velocity (px/s).
             const vel = Math.min(Math.abs(self.getVelocity()) / 1000, 2.5);
-            const r = 14 + vel * 14;
-            const op = 0.35 + Math.min(vel * 0.25, 0.45);
+            const r = 14 + vel * 16;
+            const op = 0.35 + Math.min(vel * 0.3, 0.5);
             glow.setAttribute("r", String(r));
             glow.style.opacity = String(op);
           },
         });
 
-        // Section "ripples" — each section briefly pulses a ring at the
-        // comet's current position when it enters/leaves view, signalling
-        // the ribbon's hand-off into that section.
         SECTION_IDS.forEach((id) => {
           const target = document.getElementById(id);
           if (!target) return;
           const fire = () => {
             gsap.fromTo(
               ripple,
-              { attr: { r: 4 }, opacity: 0.6 },
+              { attr: { r: 4 }, opacity: 0.7 },
               {
-                attr: { r: 38 },
+                attr: { r: 44 },
                 opacity: 0,
-                duration: 0.9,
+                duration: 1,
                 ease: "power2.out",
                 overwrite: "auto",
               },
@@ -168,7 +186,7 @@ export function GlobalRibbon() {
     <div
       ref={root}
       aria-hidden
-      className="pointer-events-none absolute inset-x-0 top-0 z-[25] overflow-hidden"
+      className="pointer-events-none absolute inset-x-0 top-0 z-0 overflow-hidden"
       style={{ height: "100%" }}
     >
       <svg
@@ -191,12 +209,23 @@ export function GlobalRibbon() {
           </radialGradient>
         </defs>
 
+        {/* Echo trail — full path drawn very faintly so the user sees where
+            the ribbon will eventually go, like a planned trajectory. */}
+        <path
+          ref={echoRef}
+          stroke="url(#grbn-grad)"
+          strokeWidth="1.5"
+          fill="none"
+          opacity="0.12"
+          strokeLinecap="round"
+        />
+
         <path
           ref={pathRef}
           stroke="url(#grbn-grad)"
           strokeWidth="2.5"
           fill="none"
-          opacity="0.55"
+          opacity="0.6"
           strokeLinecap="round"
         />
 

@@ -73,6 +73,7 @@ export function Accomplishments() {
   const root = useRef<HTMLDivElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
   const { berkeley, citrushack, industry } = ACCOMPLISHMENTS;
+  const { broaderAdmits } = berkeley;
 
   useGSAP(
     () => {
@@ -82,6 +83,9 @@ export function Accomplishments() {
       gsap.set(".js-acc-arrow", { strokeDasharray: "120 120", strokeDashoffset: 120 });
       gsap.set(".js-acc-berkeley-logo", { autoAlpha: 0, scale: 0.9 });
       gsap.set(".js-acc-eecs", { autoAlpha: 0, y: 12 });
+      gsap.set(".js-acc-broader", { autoAlpha: 0, y: 14 });
+      gsap.set(".js-acc-admit-tile", { autoAlpha: 0, y: 12, scale: 0.94 });
+      gsap.set(".js-acc-photo", { autoAlpha: 0, scale: 1.04 });
       gsap.set(".js-acc-firstplace", { autoAlpha: 0, scale: 0.6, rotate: -12 });
       gsap.set(".js-acc-vs-tile", { autoAlpha: 0, y: 18, scale: 0.94 });
       gsap.set(".js-acc-strike", { scaleX: 0, transformOrigin: "left center" });
@@ -141,6 +145,22 @@ export function Accomplishments() {
             ease: "power3.out",
             delay: reduced ? 0 : 0.7,
           });
+          gsap.to(".js-acc-broader", {
+            autoAlpha: 1,
+            y: 0,
+            duration: reduced ? 0.01 : 0.55,
+            ease: "power3.out",
+            delay: reduced ? 0 : 1.0,
+          });
+          gsap.to(".js-acc-admit-tile", {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: reduced ? 0.01 : 0.5,
+            stagger: reduced ? 0 : 0.08,
+            ease: "back.out(1.4)",
+            delay: reduced ? 0 : 1.15,
+          });
         },
       });
 
@@ -151,7 +171,13 @@ export function Accomplishments() {
         once: true,
         onEnter: () => {
           const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-          tl.to(".js-acc-firstplace", {
+          tl.to(".js-acc-photo", {
+            autoAlpha: 1,
+            scale: 1,
+            duration: reduced ? 0.01 : 0.9,
+            ease: "power3.out",
+          })
+            .to(".js-acc-firstplace", {
             autoAlpha: 1,
             scale: 1,
             rotate: -4,
@@ -317,6 +343,31 @@ export function Accomplishments() {
             </p>
             <p className="mt-3 text-sm leading-relaxed text-white/85">{berkeley.eecs.claim}</p>
           </div>
+
+          <div className="js-acc-broader border-t border-gdg-line bg-white px-5 py-5">
+            <div className="flex items-center gap-2">
+              <span aria-hidden className="inline-block h-1.5 w-6 rounded-full bg-gdg-blue" />
+              <p className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-gdg-mute">
+                {broaderAdmits.eyebrow}
+              </p>
+            </div>
+            <p className="mt-2 font-display text-xl font-bold leading-tight tracking-tight text-gdg-ink">
+              {broaderAdmits.lede}
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-gdg-ink/80">
+              {broaderAdmits.detail}
+            </p>
+            <div className="mt-4 grid grid-cols-4 gap-2">
+              {broaderAdmits.schools.map((s) => (
+                <div key={s.name} className="js-acc-admit-tile">
+                  <LogoTile slot={s} onWhite />
+                </div>
+              ))}
+            </div>
+            <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-gdg-mute">
+              Sub-10% target-major admits · class of 2026
+            </p>
+          </div>
         </article>
 
         {/* ── Citrushack ────────────────────────── */}
@@ -328,7 +379,21 @@ export function Accomplishments() {
             </p>
           </div>
 
-          <div className="mt-3 flex flex-wrap items-end gap-4">
+          <div className="js-acc-photo relative mt-4 aspect-[5/3] w-full overflow-hidden rounded-2xl shadow-soft">
+            <img
+              src={`${BASE}${citrushack.photo}`}
+              alt={citrushack.photoAlt}
+              className="absolute inset-0 h-full w-full object-cover"
+              loading="lazy"
+            />
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 via-black/20 to-transparent px-3 py-2">
+              <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-white/80">
+                Photo · {citrushack.photoCredit}
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-end gap-4">
             <div
               className="js-acc-firstplace flex h-20 w-20 shrink-0 items-center justify-center rounded-full text-white shadow-lift"
               style={{

@@ -336,9 +336,11 @@ export function WhatIsGDG() {
             </div>
           </div>
 
-          {/* Pinned cross-fade moment — separate scope, only fires on larger viewports */}
-          <div ref={pinScopeRef} className="relative mt-10 hidden h-[60vh] sm:block">
-            <div className="sticky top-0 flex h-screen items-center justify-center">
+          {/* Pinned cross-fade moment — separate scope, only fires on larger viewports.
+              Outer is h-screen so the layout box matches the pinned visual; without
+              this match the pin spacer and sibling sections overlap on release. */}
+          <div ref={pinScopeRef} className="relative mt-10 hidden h-screen sm:block">
+            <div className="flex h-full items-center justify-center">
               <div className="relative h-[18rem] w-full max-w-md">
                 {GDG_PILLARS.map((p) => (
                   <div

@@ -162,6 +162,18 @@ export const ACCOMPLISHMENTS = {
       short: "Berkeley",
       accent: "blue",
     } as LogoSlot,
+    broaderAdmits: {
+      eyebrow: "And the broader admit map",
+      lede: "Berkeley is the headline. The pattern is wider.",
+      detail:
+        "The three Berkeley seats are confirmed commits. Beyond them, GDG members earned acceptances at UCLA, USC, UCSD, and UC Irvine — many into target majors with sub-10% admit rates. A community-college pipeline, holding its own against the most selective programs in the state.",
+      schools: [
+        { name: "UCLA", file: "ucla.svg", short: "UCLA", accent: "blue" },
+        { name: "USC", file: "usc.svg", short: "USC", accent: "red" },
+        { name: "UCSD", file: "ucsd.svg", short: "UCSD", accent: "blue" },
+        { name: "UC Irvine", file: "uc-irvine.svg", short: "UCI", accent: "yellow" },
+      ] as LogoSlot[],
+    },
   },
   citrushack: {
     place: "1st",
@@ -170,6 +182,10 @@ export const ACCOMPLISHMENTS = {
     eventTagline: "An internal GDG team — fully RCC — swept first place.",
     detail:
       "A community-college team out-built squads from UCLA, UC Irvine, and UC Riverside in a 24-hour sprint.",
+    photo: "photos/citrushack-team.jpg",
+    photoAlt:
+      "GDG @ RCC team mid-build at Citrushack — laptops open, breadboards and components spread across the table.",
+    photoCredit: "Major League Hacking",
     schoolsBeaten: [
       { name: "UCLA", file: "ucla.svg", short: "UCLA", accent: "blue" },
       { name: "UC Irvine", file: "uc-irvine.svg", short: "UCI", accent: "yellow" },
