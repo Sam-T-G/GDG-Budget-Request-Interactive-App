@@ -89,6 +89,14 @@ export const LINE_ITEMS: LineItem[] = [
 
 export const TOTAL_REQUEST = LINE_ITEMS.reduce((sum, item) => sum + item.total, 0);
 
+export const GOOGLE_MATCH = {
+  eyebrow: "Google match",
+  headline: "Every dollar ASRCC funds, Google matches.",
+  detail:
+    "Google's GDG on Campus program matches chapter funding directly. Whatever ASRCC awards is doubled — often more — by Google. The $12,000 ask becomes $24,000+ in real budget on the ground.",
+  shortLabel: "Doubled by Google",
+};
+
 export const CLUB_FACTS = {
   name: "Google Developer Group on Campus at Riverside City College",
   shortName: "GDG @ RCC",
@@ -224,6 +232,11 @@ export const QA_ITEMS: { question: string; answer: string }[] = [
     question: "Why does the Silicon Valley trip cost $7,500 for 10 students?",
     answer:
       "It's the highest-leverage event on the slate per student. The cost covers travel, lodging, ground transport, and meals for a multi-day Googleplex / Stanford / SJSU visit. These ten students return as recruiters, mentors, and transfer applicants — multiplying the impact across the chapter.",
+  },
+  {
+    question: "Does Google contribute anything financially?",
+    answer:
+      "Yes — directly. Google's GDG on Campus program matches chapter funding, dollar for dollar (often more). Whatever ASRCC awards is doubled by Google. A $12,000 award becomes $24,000+ on the ground. The ASRCC commitment unlocks the match.",
   },
   {
     question: "What happens if you receive partial funding?",
