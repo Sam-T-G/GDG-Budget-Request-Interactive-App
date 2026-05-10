@@ -21,6 +21,19 @@ export type LineItem = {
   accent: GoogleColor;
 };
 
+/**
+ * Line-item amounts are grounded in:
+ *   - GSA FY 2026 per diem rates (effective Oct 1, 2025 – Sep 30, 2026)
+ *       · Standard CONUS (Riverside, CA): $110 lodging / $68 M&IE
+ *       · Santa Clara County (Mountain View): $192 lodging / $92 M&IE
+ *       · First/last day M&IE = 75% of full day
+ *       · Source: gsa.gov/travel/plan-book/per-diem-rates
+ *   - 12-pax van rental (LA market, Kayak avg): ~$139/day
+ *   - Hackathon catering (MLH organizer guide): $7–$15/pax recommended
+ *   - Bulk t-shirt screen-print, 100 ct, 1-color: $6.50–$8/shirt
+ * Totals are pinned to ASRCC line caps; row amounts are at-or-under the
+ * grounded ceiling so the breakdown is defensible to the panel.
+ */
 export const LINE_ITEMS: LineItem[] = [
   {
     id: "speakers",
@@ -36,12 +49,12 @@ export const LINE_ITEMS: LineItem[] = [
     outcome:
       "Attendees leave with a personalized professional development roadmap and concrete strategies for building a standout digital presence — backed by Google certifications.",
     expenses: [
-      { label: "Transportation", amount: 500, color: "blue" },
-      { label: "Lodging", amount: 500, color: "red" },
-      { label: "Meals", amount: 600, color: "yellow" },
-      { label: "Marketing & Swag", amount: 200, color: "green" },
-      { label: "Technology", amount: 100, color: "blue" },
-      { label: "Supplies", amount: 100, color: "red" },
+      { label: "Speaker airfare (RT, est.)", amount: 350, color: "blue" },
+      { label: "Lodging (2 nt × $110 GSA std CONUS)", amount: 220, color: "red" },
+      { label: "Meals — speaker M&IE + 50-student workshop catering", amount: 570, color: "yellow" },
+      { label: "Marketing & swag (flyers, kits, stickers)", amount: 400, color: "green" },
+      { label: "Ground transport (rideshare ONT ↔ campus)", amount: 160, color: "blue" },
+      { label: "AV & supplies (mic rental, recording, materials)", amount: 300, color: "red" },
     ],
     accent: "blue",
   },
@@ -50,7 +63,7 @@ export const LINE_ITEMS: LineItem[] = [
     title: "College & Google Tours",
     subtitle: "Silicon Valley field experience",
     total: 7500,
-    attendance: "10 students",
+    attendance: "10 students + 1 advisor",
     location: "Off-campus · California",
     eventType: "Field Trip · Existing Expense, Recurring",
     status: "Recurring program",
@@ -59,10 +72,10 @@ export const LINE_ITEMS: LineItem[] = [
     outcome:
       "Participants build a first-hand understanding of industry standards, expand their professional vision beyond the classroom, and gain networking and transfer inspiration.",
     expenses: [
-      { label: "Travel", amount: 3500, color: "red" },
-      { label: "Lodging", amount: 1400, color: "yellow" },
-      { label: "Transportation", amount: 1100, color: "green" },
-      { label: "Meals", amount: 1500, color: "blue" },
+      { label: "Travel — 2× 12-pax vans + fuel (3 d, ~840mi RT)", amount: 1800, color: "red" },
+      { label: "Lodging (2 nt × $192 GSA Santa Clara × 6 rooms)", amount: 2300, color: "yellow" },
+      { label: "Transportation (parking, tolls, on-site moves)", amount: 900, color: "green" },
+      { label: "Meals (11 pax × ~$227/d, under GSA $230 cap)", amount: 2500, color: "blue" },
     ],
     accent: "red",
   },
@@ -80,8 +93,10 @@ export const LINE_ITEMS: LineItem[] = [
     outcome:
       "Functional projects for portfolios, hands-on mastery of Google tooling, and direct connections with industry mentors and recruiters.",
     expenses: [
-      { label: "Meals", amount: 2000, color: "yellow" },
-      { label: "Technology", amount: 500, color: "green" },
+      { label: "Catering — meals + coffee (100 pax × ~$15, MLH bench)", amount: 1500, color: "yellow" },
+      { label: "Swag (100 shirts × ~$7 screen-print)", amount: 700, color: "green" },
+      { label: "Tech & prizes (HW kits, AV, prize cards)", amount: 250, color: "blue" },
+      { label: "Marketing & banners", amount: 50, color: "red" },
     ],
     accent: "green",
   },
@@ -237,6 +252,11 @@ export const QA_ITEMS: { question: string; answer: string }[] = [
     question: "Does Google contribute anything financially?",
     answer:
       "Yes — directly. Google's GDG on Campus program matches chapter funding, dollar for dollar (often more). Whatever ASRCC awards is doubled by Google. A $12,000 award becomes $24,000+ on the ground. The ASRCC commitment unlocks the match.",
+  },
+  {
+    question: "Does the club raise its own funds?",
+    answer:
+      "Yes. GDG @ RCC raises money by participating in Google events and taking on real-world projects from companies and entities tied to the Google Developer ecosystem. Those engagements bring in stipends and project revenue that grow alongside the chapter's portfolio — independent of ASRCC and the Google match.",
   },
   {
     question: "What happens if you receive partial funding?",

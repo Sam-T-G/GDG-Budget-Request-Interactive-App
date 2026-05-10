@@ -67,7 +67,7 @@ export function GDGWordmark({ className }: Props) {
           </span>
         ))}
       </div>
-      <span className="sr-only">GDG</span>
+      <span className="sr-only">Google Developer Groups</span>
     </div>
   );
 }

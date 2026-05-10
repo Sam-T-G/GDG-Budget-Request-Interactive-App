@@ -79,7 +79,7 @@ export function Hero() {
         <GDGWordmark />
 
         <SplitTitle
-          text="on Campus · Riverside City College"
+          text="Google Developer Groups on Campus · Riverside City College"
           as="h1"
           immediate
           delay={0.6}
