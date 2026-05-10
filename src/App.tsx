@@ -9,7 +9,6 @@ import { QandA } from "./components/QandA";
 import { ProgressDots } from "./components/ProgressDots";
 import { StickyTotal } from "./components/StickyTotal";
 import { Marquee } from "./components/Marquee";
-import { GlobalRibbon } from "./components/GlobalRibbon";
 
 const STATS_MARQUEE = [
   "$12,000 ASK",
@@ -32,7 +31,6 @@ const PROGRAM_MARQUEE = [
 export default function App() {
   return (
     <div className="relative min-h-screen scroll-smooth-snap">
-      <GlobalRibbon />
       <main id="hero" className="pb-24">
         <Hero />
         <Marquee items={STATS_MARQUEE} bgClassName="bg-gdg-ink" textClassName="text-white" />
