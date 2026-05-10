@@ -42,12 +42,12 @@ function LogoTile({
 }) {
   return (
     <div
-      className={`relative flex aspect-[5/3] items-center justify-center overflow-hidden rounded-2xl ${onWhite ? "bg-white shadow-soft" : "bg-gdg-paper shadow-soft"} ${className ?? ""}`}
+      className={`relative flex aspect-[5/3] items-center justify-center overflow-hidden rounded-2xl p-2 ${onWhite ? "bg-white shadow-soft" : "bg-gdg-paper shadow-soft"} ${className ?? ""}`}
     >
       <BrandImage
         src={`${BASE}brand/${slot.file}`}
         alt={`${slot.name} logo`}
-        className="max-h-[60%] max-w-[80%] object-contain"
+        className="max-h-[70%] max-w-[78%] object-contain"
         fallback={
           <div className="flex h-full w-full flex-col items-center justify-center gap-1 px-2 text-center">
             <span
@@ -104,16 +104,9 @@ export function Accomplishments() {
       gsap.set(".js-acc-cnode", { autoAlpha: 0, scale: 0.55 });
       gsap.set(".js-acc-ccenter", { autoAlpha: 0, scale: 0 });
       gsap.set(".js-acc-cpulse", { autoAlpha: 0, attr: { r: 28 } });
-      // Photo + stamp + dust
+      // Photo
       gsap.set(".js-acc-photo", { autoAlpha: 0 });
       gsap.set(".js-acc-photo-img", { scale: 1.08 });
-      gsap.set(".js-acc-stamp", {
-        autoAlpha: 0,
-        scale: 0.2,
-        rotate: -55,
-        transformOrigin: "50% 50%",
-      });
-      gsap.set(".js-acc-dust-bit", { autoAlpha: 0, scale: 0.4, x: 0, y: 0 });
       gsap.set(".js-acc-firstplace", { autoAlpha: 0, scale: 0.6, rotate: -12 });
       gsap.set(".js-acc-vs-tile", { autoAlpha: 0, y: 18, scale: 0.94 });
       gsap.set(".js-acc-strike", { scaleX: 0, transformOrigin: "left center" });
@@ -246,47 +239,6 @@ export function Accomplishments() {
               },
               "<",
             )
-            // Stamp impacts onto the photo with rotation settle.
-            .to(
-              ".js-acc-stamp",
-              {
-                autoAlpha: 1,
-                scale: 1,
-                rotate: -8,
-                duration: reduced ? 0.01 : 0.55,
-                ease: "back.out(2.6)",
-              },
-              "<+0.5",
-            )
-            // Dust burst on impact.
-            .add(() => {
-              if (reduced) return;
-              const bits = gsap.utils.toArray<SVGCircleElement>(".js-acc-dust-bit");
-              bits.forEach((bit, i) => {
-                const angle = (i / bits.length) * Math.PI * 2 - Math.PI / 2;
-                const dist = 28 + (i % 3) * 6;
-                gsap.fromTo(
-                  bit,
-                  { x: 0, y: 0, autoAlpha: 0, scale: 0.4 },
-                  {
-                    x: Math.cos(angle) * dist,
-                    y: Math.sin(angle) * dist,
-                    autoAlpha: 0.95,
-                    scale: 1,
-                    duration: 0.35,
-                    ease: "power2.out",
-                    onComplete: () => {
-                      gsap.to(bit, {
-                        autoAlpha: 0,
-                        scale: 0.5,
-                        duration: 0.45,
-                        ease: "power2.in",
-                      });
-                    },
-                  },
-                );
-              });
-            }, "<+0.05")
             // Ken Burns continuous breathing — slow zoom oscillation.
             .add(() => {
               if (reduced) return;
@@ -609,98 +561,6 @@ export function Accomplishments() {
               </span>
             </div>
 
-            {/* Championship stamp — impacts onto the photo with rotation settle. */}
-            <svg
-              className="js-acc-stamp pointer-events-none absolute right-3 top-3"
-              width="88"
-              height="88"
-              viewBox="0 0 88 88"
-              aria-hidden
-              style={{ filter: "drop-shadow(0 6px 14px rgba(0,0,0,0.35))" }}
-            >
-              <circle cx="44" cy="44" r="42" fill="#FBBC04" opacity="0.18" />
-              <circle cx="44" cy="44" r="38" fill="#EA4335" />
-              <circle
-                cx="44"
-                cy="44"
-                r="38"
-                fill="none"
-                stroke="#FBBC04"
-                strokeWidth="2"
-              />
-              <circle
-                cx="44"
-                cy="44"
-                r="30"
-                fill="none"
-                stroke="#FBBC04"
-                strokeWidth="0.8"
-                opacity="0.55"
-              />
-              <text
-                x="14"
-                y="49"
-                textAnchor="middle"
-                fill="#FBBC04"
-                fontSize="11"
-                fontWeight="700"
-              >
-                ★
-              </text>
-              <text
-                x="74"
-                y="49"
-                textAnchor="middle"
-                fill="#FBBC04"
-                fontSize="11"
-                fontWeight="700"
-              >
-                ★
-              </text>
-              <text
-                x="44"
-                y="42"
-                textAnchor="middle"
-                fill="#FFFFFF"
-                fontFamily="Google Sans, sans-serif"
-                fontWeight="800"
-                fontSize="20"
-                letterSpacing="-0.5"
-              >
-                1ST
-              </text>
-              <text
-                x="44"
-                y="58"
-                textAnchor="middle"
-                fill="#FBBC04"
-                fontFamily="Roboto Mono, monospace"
-                fontSize="6.5"
-                letterSpacing="2"
-              >
-                OVERALL
-              </text>
-            </svg>
-
-            {/* Dust burst — particles fly outward from the impact point. */}
-            <svg
-              className="pointer-events-none absolute right-3 top-3"
-              width="88"
-              height="88"
-              viewBox="0 0 88 88"
-              aria-hidden
-            >
-              {Array.from({ length: 12 }).map((_, i) => (
-                <circle
-                  key={i}
-                  className="js-acc-dust-bit"
-                  cx="44"
-                  cy="44"
-                  r={1.4 + (i % 3) * 0.7}
-                  fill="#FBBC04"
-                />
-              ))}
-            </svg>
           </div>
 
           <div className="mt-4 flex flex-wrap items-end gap-4">
