@@ -46,22 +46,22 @@ export function TheAsk() {
           <p className="mt-2 text-sm leading-relaxed text-gdg-ink/80">{GOOGLE_MATCH.detail}</p>
 
           <div className="mt-4 flex items-center gap-3 rounded-2xl bg-gdg-ink px-4 py-3 text-white">
-            <div className="flex flex-1 items-baseline gap-2">
-              <span className="font-display text-2xl font-bold tabular-nums">
+            <div className="flex min-w-0 flex-1 flex-col">
+              <span className="font-display text-2xl font-bold tabular-nums leading-none">
                 ${fmt.format(TOTAL_REQUEST)}
               </span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/60">
+              <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-white/60">
                 ASRCC
               </span>
             </div>
-            <span aria-hidden className="font-display text-lg font-bold text-white/60">
+            <span aria-hidden className="shrink-0 font-display text-lg font-bold text-white/60">
               →
             </span>
-            <div className="flex flex-1 items-baseline justify-end gap-2">
-              <span className="font-display text-2xl font-bold tabular-nums text-gdg-yellow">
+            <div className="flex min-w-0 flex-1 flex-col items-end">
+              <span className="font-display text-2xl font-bold tabular-nums leading-none text-gdg-yellow">
                 ${fmt.format(MATCHED_TOTAL)}+
               </span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/60">
+              <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-white/60">
                 On-ground
               </span>
             </div>

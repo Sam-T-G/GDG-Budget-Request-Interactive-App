@@ -135,7 +135,7 @@ export const CLUB_FACTS = {
   hearingWindow: "May 11–13, 2026 · 9 AM – 4 PM",
 };
 
-export const MISSION_PITCH = `GDG on Campus at RCC is a professional development engine. Tech and the startup model are the vessel — what we actually build is self-confidence, soft skills, and the qualities that translate to every career. Our members hail from biology, business, humanities, engineering, computer science, and beyond.`;
+export const MISSION_PITCH = `GDG chapters worldwide serve developers. Ours goes further — we forge world-class professionals. Tech and the startup model are the vessel; what we actually build is self-confidence, soft skills, and the qualities that translate to every career. Our members hail from biology, business, humanities, engineering, computer science, and beyond.`;
 
 export const VESSEL_STATEMENT = `We focus on professional development — building self-confidence, soft skills, and the universal qualities that matter in any career. Tech and the startup model are the vessel; the skills travel everywhere.`;
 

@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { QRCodeSVG } from "qrcode.react";
 import { CLUB_FACTS, TOTAL_REQUEST } from "../data/budget";
+import { GDG_FACTS } from "../data/gdg";
 import { AnimatedCounter } from "./AnimatedCounter";
 import { GDGWordmark } from "./GDGWordmark";
 import { SplitTitle } from "./SplitTitle";
@@ -86,6 +87,10 @@ export function Hero() {
           stagger={0.018}
           className="js-subtitle font-display text-2xl font-semibold leading-tight tracking-tight text-gdg-ink sm:text-3xl"
         />
+
+        <p className="js-subtitle -mt-3 text-sm leading-relaxed text-gdg-ink/75 sm:text-base">
+          {GDG_FACTS.plainSummary}
+        </p>
 
         <div className="js-counter-card relative overflow-hidden rounded-3xl bg-gdg-ink px-6 pb-7 pt-6 text-white shadow-lift">
           <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-20 blur-3xl" style={{

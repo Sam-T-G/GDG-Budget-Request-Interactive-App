@@ -162,24 +162,21 @@ export function WhatIsGDG() {
       <div className="bg-gradient-to-b from-gdg-paper via-white to-gdg-mist px-5 pb-20 pt-4 sm:px-8">
         <div className="mx-auto max-w-xl">
           <SplitTitle
-            text="A global developer community, built by Google."
+            text="A career-development club, backed by Google."
             as="h2"
             className="mt-3 font-display text-4xl font-bold leading-[1.05] tracking-tight text-gdg-ink sm:text-5xl"
           />
 
-          <figure className="js-quote mt-7 rounded-3xl bg-white p-6 shadow-soft">
-            <div className="flex items-start gap-3">
-              <div
-                aria-hidden
-                className="mt-1 flex h-7 items-center text-3xl leading-none text-gdg-blue"
-              >
-                &ldquo;
-              </div>
-              <blockquote className="text-base leading-relaxed text-gdg-ink/90">
-                {GDG_FACTS.officialDescription}
-              </blockquote>
-            </div>
-            <figcaption className="mt-3 pl-9 font-mono text-[10px] uppercase tracking-[0.16em] text-gdg-mute">
+          <p className="js-quote mt-5 text-base leading-relaxed text-gdg-ink/85">
+            {GDG_FACTS.plainSummary}
+          </p>
+
+          <figure className="js-quote mt-5 rounded-3xl bg-white p-5 shadow-soft">
+            <blockquote className="text-sm leading-relaxed text-gdg-ink/80">
+              <span aria-hidden className="mr-1 text-gdg-blue">&ldquo;</span>
+              {GDG_FACTS.officialDescription}
+            </blockquote>
+            <figcaption className="mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-gdg-mute">
               — developers.google.com / community / gdg
             </figcaption>
           </figure>
@@ -303,6 +300,19 @@ export function WhatIsGDG() {
             </p>
             <p className="mt-1 text-sm leading-relaxed text-gdg-ink/85">
               {GDG_FACTS.onCampusDescription}
+            </p>
+          </div>
+
+          <div className="mt-6 rounded-2xl border border-gdg-yellow/40 bg-gdg-yellow/10 px-5 py-4">
+            <p className="font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-gdg-mute">
+              Our chapter's mandate
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-gdg-ink">
+              Most GDG chapters serve developers.{" "}
+              <span className="font-semibold">
+                Ours goes further — we forge world-class professionals
+              </span>
+              , across every discipline at RCC.
             </p>
           </div>
 

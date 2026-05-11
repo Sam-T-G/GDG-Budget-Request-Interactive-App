@@ -8,12 +8,17 @@
  */
 
 export const GDG_FACTS = {
-  // Direct quote from developers.google.com/community/gdg
+  // Plain-language summary — what GDG actually does, in one sentence.
+  plainSummary:
+    "GDG is a career-development club, backed by Google. Students learn real industry tools, earn certifications, and connect with engineers who hire.",
+  // One-line purpose for the hero / pull-quote use.
+  purposeLine: "Career development for students — backed by Google.",
+  // Direct quote from developers.google.com/community/gdg (kept for attribution).
   officialDescription:
     "Google Developer Groups (GDGs) bring together developers and technologists to connect, learn, and grow alongside Google's technologies and experts.",
-  // Direct quote describing GDG on Campus specifically
+  // Plain-language chapter purpose (replaces verbose official copy in-app).
   onCampusDescription:
-    "GDG on Campus chapters provide learning opportunities for aspiring developers from universities and colleges around the world, allowing them to gain hands-on experience, develop essential skills, and build a strong foundation for a tech career.",
+    "GDG on Campus chapters give college students hands-on training in the tools tech companies actually use — and a direct line to Google's global network of engineers.",
   globalChapters: 1000,
   globalChaptersDisplay: "1,000+",
   globalCountries: 140,
@@ -24,22 +29,22 @@ export const GDG_FACTS = {
 export const GDG_PILLARS: { title: string; body: string; color: "blue" | "red" | "yellow" | "green" }[] = [
   {
     title: "Connect",
-    body: "Local meetups, workshops, and DevFests link students directly to Google engineers and the global GDG network.",
+    body: "Meetups and workshops put students face-to-face with Google engineers.",
     color: "blue",
   },
   {
     title: "Learn",
-    body: "Hands-on training in Google technologies — Flutter, Firebase, Gemini AI, Cloud, Android — taught by certified instructors.",
+    body: "Hands-on training in the tools tech companies use — taught by certified instructors.",
     color: "red",
   },
   {
     title: "Grow",
-    body: "Members earn industry-recognized certifications and build portfolios that translate directly to employer-ready credentials.",
+    body: "Industry-recognized certifications and portfolios that translate to jobs.",
     color: "yellow",
   },
   {
     title: "Lead",
-    body: "Chapter officers gain real organizing, public speaking, and event production experience — leadership skills that transfer.",
+    body: "Officers gain real event production, public speaking, and team leadership experience.",
     color: "green",
   },
 ];
