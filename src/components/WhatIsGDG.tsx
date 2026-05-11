@@ -13,11 +13,11 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const GOOGLE_COLORS = ["#4285F4", "#EA4335", "#FBBC04", "#34A853"];
 
-const PILLAR_BG: Record<"blue" | "red" | "yellow" | "green", string> = {
-  blue: "bg-gdg-blue",
-  red: "bg-gdg-red",
-  yellow: "bg-gdg-yellow",
-  green: "bg-gdg-green",
+const PILLAR_HEX: Record<"blue" | "red" | "yellow" | "green", string> = {
+  blue: "#4285F4",
+  red: "#EA4335",
+  yellow: "#FBBC04",
+  green: "#34A853",
 };
 
 const PILLAR_TEXT: Record<"blue" | "red" | "yellow" | "green", string> = {
@@ -27,20 +27,19 @@ const PILLAR_TEXT: Record<"blue" | "red" | "yellow" | "green", string> = {
   green: "text-gdg-green",
 };
 
-// 12 cols × 6 rows world-ish dot grid
-const COLS = 12;
+const COLS = 13;
 const ROWS = 6;
-const DOT_R = 3.2;
-const DOT_GAP_X = 24;
+const DOT_R = 3;
+const DOT_GAP_X = 22;
 const DOT_GAP_Y = 22;
 const SVG_W = COLS * DOT_GAP_X;
 const SVG_H = ROWS * DOT_GAP_Y;
 
 const CONTINENT_DOTS = new Set<number>([
-  1, 13, 14, 25, 26, 27, 38, 39, 50,
-  4, 5, 16, 17, 28, 29, 41, 53,
-  7, 8, 9, 19, 20, 21, 32, 33, 44,
-  46, 58,
+  1, 14, 15, 27, 28, 29, 41, 42, 54,
+  4, 5, 17, 18, 30, 31, 44, 57,
+  7, 8, 9, 20, 21, 22, 34, 35, 47,
+  49, 62,
 ]);
 
 const MV = { col: 1, row: 1 };
@@ -50,6 +49,10 @@ const dotPos = (col: number, row: number) => ({
   cx: col * DOT_GAP_X + DOT_GAP_X / 2,
   cy: row * DOT_GAP_Y + DOT_GAP_Y / 2,
 });
+
+const mv = dotPos(MV.col, MV.row);
+const rvs = dotPos(RVS.col, RVS.row);
+const arcD = `M ${mv.cx} ${mv.cy} Q ${(mv.cx + rvs.cx) / 2 + 24} ${(mv.cy + rvs.cy) / 2} ${rvs.cx} ${rvs.cy}`;
 
 export function WhatIsGDG() {
   const root = useRef<HTMLDivElement>(null);
@@ -62,66 +65,172 @@ export function WhatIsGDG() {
       if (!ctxRoot) return;
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      gsap.set(".js-quote", { autoAlpha: 0, y: 24 });
-      gsap.set(".js-stat-num", { autoAlpha: 0, y: 12 });
-      gsap.set(".js-pillar", { autoAlpha: 0, y: 28 });
-      gsap.set(".js-rcc-card", { autoAlpha: 0, y: 28, scale: 0.97 });
+      // Initial states
+      gsap.set(".js-lede", { autoAlpha: 0, y: 18, filter: "blur(4px)" });
+      gsap.set(".js-quote", { autoAlpha: 0, y: 18 });
+      gsap.set(".js-quote-mark", { autoAlpha: 0, scale: 0.5, rotation: -10 });
+
+      gsap.set(".js-scale-eyebrow", { autoAlpha: 0, y: 10 });
+      gsap.set(".js-scale-counter", { autoAlpha: 0, scale: 0.94, filter: "blur(10px)" });
+      gsap.set(".js-scale-sub", { autoAlpha: 0, y: 12 });
       gsap.set(".js-dot", { autoAlpha: 0, scale: 0 });
-      gsap.set(".js-line", { strokeDasharray: "200 200", strokeDashoffset: 200 });
+      gsap.set(".js-arc", { strokeDasharray: 220, strokeDashoffset: 220 });
+      gsap.set(".js-mv-core", { autoAlpha: 0, scale: 0 });
+      gsap.set(".js-rvs-core", { autoAlpha: 0, scale: 0 });
+      gsap.set(".js-rvs-halo", { autoAlpha: 0, scale: 0 });
+      gsap.set(".js-map-label", { autoAlpha: 0, y: 8 });
+      gsap.set(".js-handoff", { autoAlpha: 0, y: 18, filter: "blur(6px)" });
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: ctxRoot,
-          start: "top 70%",
-          once: true,
-        },
-        defaults: { ease: "power3.out" },
-      });
+      gsap.set(".js-pillars-head", { autoAlpha: 0, y: 14 });
+      gsap.set(".js-pillar-rule", { scaleX: 0, transformOrigin: "left center" });
+      gsap.set(".js-pillar-num", { autoAlpha: 0, x: -14 });
+      gsap.set(".js-pillar-title", { autoAlpha: 0, y: 10 });
+      gsap.set(".js-pillar-body", { autoAlpha: 0, y: 8 });
+      gsap.set(".js-oncampus", { autoAlpha: 0, y: 16 });
 
-      tl.to(".js-quote", { autoAlpha: 1, y: 0, duration: 0.7 })
-        .to(
-          ".js-dot",
-          {
-            autoAlpha: 1,
-            scale: 1,
-            duration: reduced ? 0.01 : 0.5,
-            stagger: { each: reduced ? 0 : 0.012, from: "random" },
-            ease: "back.out(2)",
-          },
-          "-=0.3",
-        )
-        .to(
-          ".js-line",
-          {
-            strokeDashoffset: 0,
-            duration: reduced ? 0.01 : 1,
-            ease: "power2.inOut",
-          },
-          "-=0.4",
-        )
-        .to(
-          ".js-stat-num",
-          { autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.1 },
-          "-=0.7",
-        )
-        .to(
-          ".js-pillar",
-          { autoAlpha: 1, y: 0, duration: 0.55, stagger: 0.08 },
-          "-=0.4",
-        )
-        .to(".js-rcc-card", { autoAlpha: 1, y: 0, scale: 1, duration: 0.6 }, "-=0.2");
+      gsap.set(".js-mandate-bg", { scale: 1.08 });
+      gsap.set(".js-mandate-eyebrow", { autoAlpha: 0, y: 12 });
+      gsap.set(".js-mandate-line1", { autoAlpha: 0, y: 18, filter: "blur(8px)" });
+      gsap.set(".js-mandate-line2", { autoAlpha: 0, y: 18, filter: "blur(8px)" });
+      gsap.set(".js-mandate-footer", { autoAlpha: 0, y: 12 });
+      gsap.set(".js-rcc-card", { autoAlpha: 0, y: 28, scale: 0.96 });
 
-      // Counter tweens
-      const chapters = { val: 0 };
-      const countries = { val: 0 };
+      // ACT I — Identity
       ScrollTrigger.create({
-        trigger: ctxRoot,
-        start: "top 60%",
+        trigger: ".js-act-i",
+        start: "top 75%",
         once: true,
         onEnter: () => {
+          const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+          tl.to(".js-lede", {
+            autoAlpha: 1,
+            y: 0,
+            filter: "blur(0px)",
+            duration: reduced ? 0.01 : 0.7,
+          })
+            .to(
+              ".js-quote-mark",
+              {
+                autoAlpha: 1,
+                scale: 1,
+                rotation: 0,
+                duration: reduced ? 0.01 : 0.6,
+                ease: "back.out(2.2)",
+              },
+              "-=0.3",
+            )
+            .to(
+              ".js-quote",
+              { autoAlpha: 1, y: 0, duration: reduced ? 0.01 : 0.6 },
+              "-=0.4",
+            );
+        },
+      });
+
+      // ACT II — Scale (dramatic)
+      ScrollTrigger.create({
+        trigger: ".js-act-ii",
+        start: "top 70%",
+        once: true,
+        onEnter: () => {
+          const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+          tl.to(".js-scale-eyebrow", {
+            autoAlpha: 1,
+            y: 0,
+            duration: reduced ? 0.01 : 0.5,
+          })
+            .to(
+              ".js-scale-counter",
+              {
+                autoAlpha: 1,
+                scale: 1,
+                filter: "blur(0px)",
+                duration: reduced ? 0.01 : 1.0,
+              },
+              "-=0.2",
+            )
+            .to(
+              ".js-scale-sub",
+              { autoAlpha: 1, y: 0, duration: reduced ? 0.01 : 0.55 },
+              "-=0.5",
+            )
+            .to(
+              ".js-dot",
+              {
+                autoAlpha: 1,
+                scale: 1,
+                duration: reduced ? 0.01 : 0.55,
+                stagger: { each: reduced ? 0 : 0.01, from: "random" },
+                ease: "back.out(2)",
+              },
+              "-=0.5",
+            )
+            .to(
+              ".js-arc",
+              {
+                strokeDashoffset: 0,
+                duration: reduced ? 0.01 : 1.1,
+                ease: "power2.inOut",
+              },
+              "-=0.4",
+            )
+            .to(
+              ".js-mv-core",
+              {
+                autoAlpha: 1,
+                scale: 1,
+                duration: reduced ? 0.01 : 0.4,
+                ease: "back.out(2.4)",
+              },
+              "-=0.9",
+            )
+            .to(
+              ".js-rvs-halo",
+              {
+                autoAlpha: 0.55,
+                scale: 1,
+                duration: reduced ? 0.01 : 0.6,
+                ease: "power2.out",
+              },
+              "-=0.25",
+            )
+            .to(
+              ".js-rvs-core",
+              {
+                autoAlpha: 1,
+                scale: 1,
+                duration: reduced ? 0.01 : 0.5,
+                ease: "back.out(2.8)",
+              },
+              "-=0.4",
+            )
+            .to(
+              ".js-map-label",
+              {
+                autoAlpha: 1,
+                y: 0,
+                duration: reduced ? 0.01 : 0.5,
+                stagger: reduced ? 0 : 0.1,
+              },
+              "-=0.2",
+            )
+            .to(
+              ".js-handoff",
+              {
+                autoAlpha: 1,
+                y: 0,
+                filter: "blur(0px)",
+                duration: reduced ? 0.01 : 0.9,
+              },
+              "-=0.1",
+            );
+
+          // Counter tweens
+          const chapters = { val: 0 };
           gsap.to(chapters, {
             val: GDG_FACTS.globalChapters,
-            duration: reduced ? 0.01 : 1.6,
+            duration: reduced ? 0.01 : 1.8,
+            delay: 0.3,
             ease: "power2.out",
             onUpdate: () => {
               if (counterRef.current) {
@@ -129,30 +238,140 @@ export function WhatIsGDG() {
               }
             },
           });
+          const countries = { val: 0 };
           gsap.to(countries, {
             val: GDG_FACTS.globalCountries,
             duration: reduced ? 0.01 : 1.4,
+            delay: 0.6,
             ease: "power2.out",
-            delay: 0.2,
             onUpdate: () => {
               if (countriesRef.current) {
                 countriesRef.current.textContent = Math.round(countries.val).toString();
               }
             },
           });
+
+          if (!reduced) {
+            // Continuous gentle pulse at Riverside node
+            gsap.to(".js-rvs-halo", {
+              scale: 1.6,
+              autoAlpha: 0,
+              duration: 1.8,
+              repeat: -1,
+              ease: "power2.out",
+              delay: 1.6,
+            });
+          }
         },
       });
 
-      if (!reduced) {
-        gsap.to(".js-rcc-pulse", {
-          scale: 1.4,
-          autoAlpha: 0,
-          duration: 1.6,
-          repeat: -1,
-          ease: "power2.out",
-          delay: 1.8,
+      // ACT III — Pillars (editorial reveal)
+      ScrollTrigger.create({
+        trigger: ".js-act-iii",
+        start: "top 75%",
+        once: true,
+        onEnter: () => {
+          const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+          tl.to(".js-pillars-head", {
+            autoAlpha: 1,
+            y: 0,
+            duration: reduced ? 0.01 : 0.55,
+          }).to(
+            ".js-oncampus",
+            { autoAlpha: 1, y: 0, duration: reduced ? 0.01 : 0.5, delay: reduced ? 0 : 0.4 },
+            0,
+          );
+        },
+      });
+
+      const pillarRows = gsap.utils.toArray<HTMLElement>(".js-pillar-row");
+      pillarRows.forEach((row, i) => {
+        ScrollTrigger.create({
+          trigger: row,
+          start: "top 88%",
+          once: true,
+          onEnter: () => {
+            const tl = gsap.timeline({
+              delay: reduced ? 0 : i * 0.05,
+              defaults: { ease: "power3.out" },
+            });
+            tl.to(row.querySelector(".js-pillar-rule"), {
+              scaleX: 1,
+              duration: reduced ? 0.01 : 0.55,
+            })
+              .to(
+                row.querySelector(".js-pillar-num"),
+                { autoAlpha: 1, x: 0, duration: reduced ? 0.01 : 0.4 },
+                "-=0.3",
+              )
+              .to(
+                row.querySelector(".js-pillar-title"),
+                { autoAlpha: 1, y: 0, duration: reduced ? 0.01 : 0.45 },
+                "-=0.25",
+              )
+              .to(
+                row.querySelector(".js-pillar-body"),
+                { autoAlpha: 1, y: 0, duration: reduced ? 0.01 : 0.4 },
+                "-=0.2",
+              );
+          },
         });
-      }
+      });
+
+      // ACT IV — Mandate manifesto
+      ScrollTrigger.create({
+        trigger: ".js-act-iv",
+        start: "top 65%",
+        once: true,
+        onEnter: () => {
+          const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+          tl.to(".js-mandate-bg", {
+            scale: 1,
+            duration: reduced ? 0.01 : 2.4,
+            ease: "power1.out",
+          })
+            .to(
+              ".js-mandate-eyebrow",
+              { autoAlpha: 1, y: 0, duration: reduced ? 0.01 : 0.5 },
+              0,
+            )
+            .to(
+              ".js-mandate-line1",
+              {
+                autoAlpha: 1,
+                y: 0,
+                filter: "blur(0px)",
+                duration: reduced ? 0.01 : 0.9,
+              },
+              0.2,
+            )
+            .to(
+              ".js-mandate-line2",
+              {
+                autoAlpha: 1,
+                y: 0,
+                filter: "blur(0px)",
+                duration: reduced ? 0.01 : 0.95,
+              },
+              0.6,
+            )
+            .to(
+              ".js-mandate-footer",
+              { autoAlpha: 1, y: 0, duration: reduced ? 0.01 : 0.5 },
+              0.95,
+            )
+            .to(
+              ".js-rcc-card",
+              {
+                autoAlpha: 1,
+                y: 0,
+                scale: 1,
+                duration: reduced ? 0.01 : 0.75,
+              },
+              1.1,
+            );
+        },
+      });
     },
     { scope: root },
   );
@@ -160,7 +379,9 @@ export function WhatIsGDG() {
   return (
     <section ref={root} id="about-gdg" className="scroll-mt-20">
       <ChapterMarker number="01" label="What is GDG?" color="blue" />
-      <div className="bg-gradient-to-b from-gdg-paper via-white to-gdg-mist px-5 pb-20 pt-4 sm:px-8">
+
+      {/* ACT I — Identity */}
+      <div className="js-act-i bg-gradient-to-b from-gdg-paper via-white to-white px-5 pb-14 pt-4 sm:px-8">
         <div className="mx-auto max-w-xl">
           <SplitTitle
             text="A career-development club, backed by Google."
@@ -168,195 +389,319 @@ export function WhatIsGDG() {
             className="mt-3 font-display text-4xl font-bold leading-[1.05] tracking-tight text-gdg-ink sm:text-5xl"
           />
 
-          <p className="js-quote mt-5 text-base leading-relaxed text-gdg-ink/85">
+          <p className="js-lede mt-6 text-base leading-relaxed text-gdg-ink/80">
             {GDG_FACTS.plainSummary}
           </p>
 
-          <figure className="js-quote mt-5 rounded-3xl bg-white p-5 shadow-soft">
-            <blockquote className="text-sm leading-relaxed text-gdg-ink/80">
-              <span aria-hidden className="mr-1 text-gdg-blue">&ldquo;</span>
+          <figure className="js-quote relative mt-8 rounded-3xl bg-gdg-mist/70 px-6 py-7">
+            <span
+              aria-hidden
+              className="js-quote-mark absolute -left-1 -top-4 font-display text-[5rem] font-bold leading-none text-gdg-blue/25"
+            >
+              &ldquo;
+            </span>
+            <blockquote className="relative text-base leading-relaxed text-gdg-ink/85">
               {GDG_FACTS.officialDescription}
             </blockquote>
-            <figcaption className="mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-gdg-mute">
-              — developers.google.com / community / gdg
+            <figcaption className="mt-4 flex items-center gap-2">
+              <span aria-hidden className="inline-block h-px w-6 bg-gdg-blue" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-gdg-mute">
+                developers.google.com / community / gdg
+              </span>
             </figcaption>
           </figure>
+        </div>
+      </div>
 
-          {/* World dots + connection line */}
-          <div className="mt-8 overflow-hidden rounded-3xl bg-gdg-ink p-5 shadow-lift">
-            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-white/60">
+      {/* ACT II — Scale (full-bleed dark) */}
+      <div className="js-act-ii relative overflow-hidden bg-gdg-ink py-16 sm:py-20">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-30 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle at 18% 25%, #4285F4 0%, transparent 36%), radial-gradient(circle at 82% 75%, #34A853 0%, transparent 36%), radial-gradient(circle at 50% 50%, #FBBC04 0%, transparent 30%)",
+          }}
+        />
+
+        <div className="relative mx-auto max-w-xl px-5 sm:px-8">
+          <div className="js-scale-eyebrow flex items-center gap-2">
+            <span aria-hidden className="inline-block h-2 w-2 rounded-full bg-gdg-yellow" />
+            <p className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-white/70">
               Global reach
             </p>
-            <div className="mt-3 flex items-baseline gap-6">
-              <div>
-                <span
-                  ref={counterRef}
-                  className="js-stat-num inline-block font-display text-4xl font-bold tabular-nums text-white"
-                >
-                  0+
-                </span>
-                <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-white/60">
-                  chapters
-                </p>
-              </div>
-              <div>
-                <span
-                  ref={countriesRef}
-                  className="js-stat-num inline-block font-display text-4xl font-bold tabular-nums text-white"
-                >
-                  0
-                </span>
-                <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-white/60">
-                  countries
-                </p>
-              </div>
-            </div>
+          </div>
 
-            <div className="mt-4 -mx-1 overflow-hidden">
-              <svg
-                viewBox={`0 0 ${SVG_W} ${SVG_H}`}
-                width="100%"
-                height="auto"
-                role="img"
-                aria-label="Stylized world dot grid"
-                className="block"
-              >
-                {Array.from({ length: COLS * ROWS }).map((_, i) => {
-                  const col = i % COLS;
-                  const row = Math.floor(i / COLS);
-                  const { cx, cy } = dotPos(col, row);
-                  const isLand = CONTINENT_DOTS.has(i);
-                  const color = isLand
-                    ? GOOGLE_COLORS[(col + row) % GOOGLE_COLORS.length]
-                    : "rgba(255,255,255,0.10)";
-                  return (
-                    <circle
-                      key={i}
-                      className="js-dot"
-                      cx={cx}
-                      cy={cy}
-                      r={isLand ? DOT_R : DOT_R * 0.55}
-                      fill={color}
-                    />
-                  );
-                })}
-
-                <line
-                  className="js-line"
-                  x1={dotPos(MV.col, MV.row).cx}
-                  y1={dotPos(MV.col, MV.row).cy}
-                  x2={dotPos(RVS.col, RVS.row).cx}
-                  y2={dotPos(RVS.col, RVS.row).cy}
-                  stroke="#FBBC04"
-                  strokeWidth={1.5}
-                  strokeLinecap="round"
-                />
-
-                <circle
-                  className="js-rcc-pulse"
-                  cx={dotPos(RVS.col, RVS.row).cx}
-                  cy={dotPos(RVS.col, RVS.row).cy}
-                  r={DOT_R + 1}
-                  fill="none"
-                  stroke="#FBBC04"
-                  strokeWidth={1.5}
-                  opacity={0.7}
-                />
-              </svg>
-            </div>
-
-            <p className="mt-2 text-xs leading-relaxed text-white/70">
-              Mountain View → Riverside · GDG on Campus brings the same global ecosystem to RCC.
+          <div className="js-scale-counter mt-5">
+            <span
+              ref={counterRef}
+              className="block font-display text-[5.5rem] font-bold leading-[0.95] tabular-nums text-white sm:text-[7rem]"
+              style={{ letterSpacing: "-0.045em" }}
+            >
+              0+
+            </span>
+            <p className="mt-1 font-mono text-[11px] font-medium uppercase tracking-[0.22em] text-white/55">
+              chapters worldwide
             </p>
           </div>
 
-          {/* Pillars (two-tier: pinned cross-fade on big screens, static grid on small) */}
-          <div className="mt-8">
-            <p className="mb-3 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-gdg-mute">
-              Four pillars
-            </p>
-            {/* Static grid — always visible (pin layers over it on big screens) */}
-            <div className="grid grid-cols-2 gap-3">
-              {GDG_PILLARS.map((p) => (
-                <div
-                  key={p.title}
-                  className="js-pillar relative overflow-hidden rounded-2xl bg-white p-4 shadow-soft"
-                >
-                  <span
-                    aria-hidden
-                    className={`absolute -right-3 -top-3 h-10 w-10 rounded-full opacity-15 ${PILLAR_BG[p.color]}`}
+          <div className="js-scale-sub mt-6 flex items-baseline gap-3 border-t border-white/10 pt-5">
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/45">
+              In
+            </span>
+            <span
+              ref={countriesRef}
+              className="font-display text-4xl font-bold tabular-nums text-gdg-yellow"
+            >
+              0
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/45">
+              countries
+            </span>
+          </div>
+
+          <div className="relative mt-10 -mx-2">
+            <svg
+              viewBox={`0 0 ${SVG_W} ${SVG_H}`}
+              width="100%"
+              height="auto"
+              role="img"
+              aria-label="Stylized world dot grid showing the line from Mountain View to Riverside"
+              className="block"
+            >
+              {Array.from({ length: COLS * ROWS }).map((_, i) => {
+                const col = i % COLS;
+                const row = Math.floor(i / COLS);
+                const { cx, cy } = dotPos(col, row);
+                const isLand = CONTINENT_DOTS.has(i);
+                const color = isLand
+                  ? GOOGLE_COLORS[(col + row) % GOOGLE_COLORS.length]
+                  : "rgba(255,255,255,0.10)";
+                return (
+                  <circle
+                    key={i}
+                    className="js-dot"
+                    cx={cx}
+                    cy={cy}
+                    r={isLand ? DOT_R : DOT_R * 0.55}
+                    fill={color}
                   />
-                  <h3 className={`font-display text-lg font-bold tracking-tight ${PILLAR_TEXT[p.color]}`}>
-                    {p.title}
-                  </h3>
-                  <p className="mt-1 text-xs leading-relaxed text-gdg-ink/80">{p.body}</p>
-                </div>
-              ))}
+                );
+              })}
+
+              <path
+                className="js-arc"
+                d={arcD}
+                stroke="#FBBC04"
+                strokeWidth={1.4}
+                fill="none"
+                strokeLinecap="round"
+              />
+
+              <circle
+                className="js-mv-core"
+                cx={mv.cx}
+                cy={mv.cy}
+                r={DOT_R + 1.6}
+                fill="#4285F4"
+              />
+
+              <circle
+                className="js-rvs-halo"
+                cx={rvs.cx}
+                cy={rvs.cy}
+                r={DOT_R + 5}
+                fill="none"
+                stroke="#FBBC04"
+                strokeWidth={1.4}
+              />
+              <circle
+                className="js-rvs-core"
+                cx={rvs.cx}
+                cy={rvs.cy}
+                r={DOT_R + 2.4}
+                fill="#FBBC04"
+              />
+            </svg>
+
+            <div className="mt-4 grid grid-cols-2 gap-3 px-1">
+              <div className="js-map-label">
+                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/55">
+                  Mountain View
+                </span>
+                <p className="mt-0.5 text-[11px] leading-snug text-white/75">
+                  Google HQ · the source
+                </p>
+              </div>
+              <div className="js-map-label text-right">
+                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-gdg-yellow">
+                  Riverside
+                </span>
+                <p className="mt-0.5 text-[11px] leading-snug text-white/75">
+                  RCC · the seat
+                </p>
+              </div>
             </div>
           </div>
 
-          <div className="mt-8 rounded-2xl border border-gdg-line bg-white px-5 py-4">
-            <p className="font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-gdg-mute">
-              GDG on Campus
-            </p>
-            <p className="mt-1 text-sm leading-relaxed text-gdg-ink/85">
+          <p className="js-handoff mt-12 font-display text-3xl font-bold leading-[1.05] tracking-tight text-white sm:text-4xl">
+            Now, one of those chapters is{" "}
+            <span className="text-gdg-yellow">here.</span>
+          </p>
+        </div>
+      </div>
+
+      {/* ACT III — Pillars (editorial) */}
+      <div className="js-act-iii bg-white px-5 pb-14 pt-16 sm:px-8 sm:pt-20">
+        <div className="mx-auto max-w-xl">
+          <div className="js-pillars-head">
+            <div className="flex items-center gap-2">
+              <span aria-hidden className="inline-block h-2 w-2 rounded-full bg-gdg-ink" />
+              <p className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-gdg-mute">
+                How it works
+              </p>
+            </div>
+            <h3 className="mt-3 font-display text-4xl font-bold leading-[1.02] tracking-tight text-gdg-ink sm:text-5xl">
+              Four pillars.
+            </h3>
+          </div>
+
+          <ul className="mt-10 space-y-9">
+            {GDG_PILLARS.map((p, i) => (
+              <li key={p.title} className="js-pillar-row relative pt-4">
+                <span
+                  aria-hidden
+                  className="js-pillar-rule absolute left-0 top-0 h-px w-full origin-left"
+                  style={{
+                    background: `linear-gradient(90deg, ${PILLAR_HEX[p.color]} 0%, ${PILLAR_HEX[p.color]}33 60%, transparent 100%)`,
+                  }}
+                />
+                <div className="flex items-baseline gap-5">
+                  <span
+                    className="js-pillar-num font-mono text-[11px] font-medium tracking-[0.24em]"
+                    style={{ color: PILLAR_HEX[p.color] }}
+                  >
+                    0{i + 1}
+                  </span>
+                  <div className="flex-1">
+                    <h4
+                      className={`js-pillar-title font-display text-3xl font-bold leading-none tracking-tight ${PILLAR_TEXT[p.color]} sm:text-4xl`}
+                    >
+                      {p.title}.
+                    </h4>
+                    <p className="js-pillar-body mt-3 max-w-md text-sm leading-relaxed text-gdg-ink/75">
+                      {p.body}
+                    </p>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <div className="js-oncampus mt-14 rounded-2xl border border-gdg-line bg-gdg-mist/50 px-5 py-4">
+            <div className="flex items-center gap-2">
+              <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-gdg-green" />
+              <p className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-gdg-mute">
+                GDG on Campus
+              </p>
+            </div>
+            <p className="mt-2 text-sm leading-relaxed text-gdg-ink/85">
               {GDG_FACTS.onCampusDescription}
             </p>
           </div>
+        </div>
+      </div>
 
-          <div className="mt-6 rounded-2xl border border-gdg-yellow/40 bg-gdg-yellow/10 px-5 py-4">
-            <p className="font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-gdg-mute">
-              Our chapter's mandate
-            </p>
-            <p className="mt-1 text-sm leading-relaxed text-gdg-ink">
-              Most GDG chapters serve developers.{" "}
-              <span className="font-semibold">
-                Ours goes further. We forge world-class professionals
-              </span>
-              , across every discipline at RCC.
-            </p>
-          </div>
+      {/* ACT IV — Mandate manifesto (full-bleed colored) */}
+      <div className="js-act-iv relative overflow-hidden">
+        <div
+          aria-hidden
+          className="js-mandate-bg absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(135deg, #4285F4 0%, #34A853 35%, #FBBC04 70%, #EA4335 100%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gdg-ink/65 mix-blend-multiply"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 opacity-30"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.20) 0%, transparent 40%), radial-gradient(circle at 80% 75%, rgba(255,255,255,0.10) 0%, transparent 42%)",
+          }}
+        />
 
-          <article className="js-rcc-card relative mt-6 overflow-hidden rounded-3xl bg-gdg-ink shadow-lift">
-            <BrandImage
-              src={`${import.meta.env.BASE_URL}brand/chapter-banner.png`}
-              alt="GDG on Campus Riverside City College banner"
-              className="h-32 w-full object-cover opacity-70"
-              fallback={
-                <div
-                  aria-hidden
-                  className="h-32 w-full"
-                  style={{
-                    background:
-                      "linear-gradient(115deg, #4285F4 0%, #34A853 35%, #FBBC04 65%, #EA4335 100%)",
-                    opacity: 0.85,
-                  }}
-                />
-              }
-            />
-            <div className="relative -mt-10 px-5 pb-6 pt-2">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/95 px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-gdg-ink shadow-soft">
-                <span className="inline-block h-2 w-2 rounded-full bg-gdg-green" />
-                {RCC_CHAPTER.established}
-              </div>
-              <h3 className="mt-7 font-display text-xl font-bold leading-tight tracking-tight text-white">
-                {RCC_CHAPTER.fullName}
-              </h3>
-              <p className="mt-1 text-sm text-white/75">
-                {CLUB_FACTS.activeMembers} active members · {RCC_CHAPTER.region}
+        <div className="relative px-5 py-20 sm:px-8 sm:py-24">
+          <div className="mx-auto max-w-xl">
+            <div className="js-mandate-eyebrow flex items-center gap-2">
+              <span aria-hidden className="inline-block h-2 w-2 rounded-full bg-gdg-yellow" />
+              <p className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-white/70">
+                Our chapter's mandate
               </p>
-              <a
-                href={RCC_CHAPTER.link}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-gdg-ink active:scale-[0.98]"
-              >
-                See the global directory
-                <span aria-hidden>→</span>
-              </a>
             </div>
-          </article>
 
+            <h3 className="mt-6 font-display font-bold leading-[1.02] tracking-tight text-white">
+              <span className="js-mandate-line1 block text-[2.5rem] text-white/55 sm:text-[3.25rem]">
+                Most chapters serve developers.
+              </span>
+              <span className="js-mandate-line2 mt-3 block text-[2.5rem] text-white sm:text-[3.25rem]">
+                Ours <span className="text-gdg-yellow">forges</span> professionals.
+              </span>
+            </h3>
+
+            <p className="js-mandate-footer mt-8 max-w-md text-base leading-relaxed text-white/85">
+              Across every discipline at RCC. Biology, business, humanities, engineering, communications, computer science.
+            </p>
+
+            <article className="js-rcc-card mt-12 overflow-hidden rounded-3xl bg-white shadow-lift">
+              <BrandImage
+                src={`${import.meta.env.BASE_URL}brand/chapter-banner.png`}
+                alt="GDG on Campus Riverside City College banner"
+                className="h-32 w-full object-cover"
+                fallback={
+                  <div
+                    aria-hidden
+                    className="h-32 w-full"
+                    style={{
+                      background:
+                        "linear-gradient(115deg, #4285F4 0%, #34A853 35%, #FBBC04 65%, #EA4335 100%)",
+                    }}
+                  />
+                }
+              />
+              <div className="relative -mt-9 px-5 pb-6 pt-2">
+                <div className="inline-flex items-center gap-2 rounded-full bg-gdg-ink px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-white shadow-soft">
+                  <span aria-hidden className="inline-block h-2 w-2 rounded-full bg-gdg-green" />
+                  {RCC_CHAPTER.established}
+                </div>
+                <h4 className="mt-6 font-display text-xl font-bold leading-tight tracking-tight text-gdg-ink">
+                  {RCC_CHAPTER.fullName}
+                </h4>
+                <p className="mt-1 text-sm text-gdg-mute">
+                  {CLUB_FACTS.activeMembers} active members · {RCC_CHAPTER.region}
+                </p>
+                <a
+                  href={RCC_CHAPTER.link}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-gdg-ink px-4 py-2 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-white active:scale-[0.98]"
+                >
+                  See the global directory
+                  <span aria-hidden>→</span>
+                </a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      {/* RareSeat — final note on white */}
+      <div className="bg-white px-5 pb-14 pt-4 sm:px-8">
+        <div className="mx-auto max-w-xl">
           <RareSeat />
         </div>
       </div>
