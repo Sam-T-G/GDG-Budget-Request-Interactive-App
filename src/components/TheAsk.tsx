@@ -1,10 +1,30 @@
 import { GOOGLE_MATCH, LINE_ITEMS, TOTAL_REQUEST } from "../data/budget";
 import { AnimatedCounter } from "./AnimatedCounter";
-import { LineItemCard } from "./LineItemCard";
+import { LineItemCardA } from "./LineItemCardA";
+import { LineItemCardB } from "./LineItemCardB";
+import { LineItemCardC } from "./LineItemCardC";
 import { SectionShell } from "./SectionShell";
 
 const fmt = new Intl.NumberFormat("en-US");
 const MATCHED_TOTAL = TOTAL_REQUEST * 2;
+
+const VARIANTS = [
+  {
+    Component: LineItemCardA,
+    label: "Variant A · Ledger that breathes",
+    detail: "Donut + per-row math reveal + match toggle + outcomes",
+  },
+  {
+    Component: LineItemCardB,
+    label: "Variant B · Stripped",
+    detail: "Receipt + per-row math reveal + match toggle",
+  },
+  {
+    Component: LineItemCardC,
+    label: "Variant C · Always-on shadow",
+    detail: "Ghost bars show the Google match constantly — no toggle",
+  },
+];
 
 export function TheAsk() {
   return (
@@ -14,12 +34,25 @@ export function TheAsk() {
       title="$12,000 across three programs."
       tint="red"
     >
-      <p className="text-sm text-gdg-mute">Tap any card to expand the full expense breakdown.</p>
+      <p className="text-sm text-gdg-mute">
+        Tap any card to expand. Three presentation variants below — same data, different design.
+      </p>
 
-      <div className="mt-5 space-y-4">
-        {LINE_ITEMS.map((item, i) => (
-          <LineItemCard key={item.id} item={item} index={i} />
-        ))}
+      <div className="mt-5 space-y-6">
+        {LINE_ITEMS.map((item, i) => {
+          const { Component, label, detail } = VARIANTS[i];
+          return (
+            <div key={item.id} className="space-y-2">
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-1">
+                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-gdg-ink">
+                  {label}
+                </p>
+                <p className="text-[10px] text-gdg-mute">{detail}</p>
+              </div>
+              <Component item={item} index={i} />
+            </div>
+          );
+        })}
       </div>
 
       <div className="mt-6 flex items-baseline justify-between rounded-3xl bg-gdg-ink px-5 py-4 text-white shadow-lift">

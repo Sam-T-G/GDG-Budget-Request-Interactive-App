@@ -1,10 +1,16 @@
+export type ExpenseSource = "GSA" | "MLH" | "Kayak" | "Market" | "Bench" | "GSA + MLH";
+
 export type ExpenseRow = {
   label: string;
   amount: number;
   color: GoogleColor;
+  math?: string;
+  source?: ExpenseSource;
 };
 
 export type GoogleColor = "blue" | "red" | "yellow" | "green";
+
+export type Outcome = { headline: string; sublabel: string };
 
 export type LineItem = {
   id: string;
@@ -18,6 +24,7 @@ export type LineItem = {
   overview: string;
   outcome: string;
   expenses: ExpenseRow[];
+  outcomes?: Outcome[];
   accent: GoogleColor;
 };
 
@@ -49,12 +56,52 @@ export const LINE_ITEMS: LineItem[] = [
     outcome:
       "Attendees leave with a personalized professional development roadmap and concrete strategies for building a standout digital presence — backed by Google certifications.",
     expenses: [
-      { label: "Speaker airfare (RT, est.)", amount: 350, color: "blue" },
-      { label: "Lodging (2 nt × $110 GSA std CONUS)", amount: 220, color: "red" },
-      { label: "Meals — speaker M&IE + 50-student workshop catering", amount: 570, color: "yellow" },
-      { label: "Marketing & swag (flyers, kits, stickers)", amount: 400, color: "green" },
-      { label: "Ground transport (rideshare ONT ↔ campus)", amount: 160, color: "blue" },
-      { label: "AV & supplies (mic rental, recording, materials)", amount: 300, color: "red" },
+      {
+        label: "Speaker airfare",
+        amount: 350,
+        color: "blue",
+        math: "Round-trip US domestic flight, market estimate",
+        source: "Kayak",
+      },
+      {
+        label: "Lodging",
+        amount: 220,
+        color: "red",
+        math: "2 nt × $110 GSA std CONUS",
+        source: "GSA",
+      },
+      {
+        label: "Meals & workshop catering",
+        amount: 570,
+        color: "yellow",
+        math: "$68 M&IE × 2 d + 50 pax × ~$9 catering",
+        source: "GSA + MLH",
+      },
+      {
+        label: "Marketing & swag",
+        amount: 400,
+        color: "green",
+        math: "Flyers + workshop kits + stickers",
+        source: "Bench",
+      },
+      {
+        label: "Ground transport",
+        amount: 160,
+        color: "blue",
+        math: "4× rideshare ONT ↔ RCC + on-site moves",
+        source: "Bench",
+      },
+      {
+        label: "AV & supplies",
+        amount: 300,
+        color: "red",
+        math: "Mic rental + recording + handout materials",
+        source: "Bench",
+      },
+    ],
+    outcomes: [
+      { headline: "50+", sublabel: "Students trained per workshop" },
+      { headline: "Cert", sublabel: "Google credentials issued on-site" },
     ],
     accent: "blue",
   },
@@ -72,10 +119,38 @@ export const LINE_ITEMS: LineItem[] = [
     outcome:
       "Participants build a first-hand understanding of industry standards, expand their professional vision beyond the classroom, and gain networking and transfer inspiration.",
     expenses: [
-      { label: "Travel — 2× 12-pax vans + fuel (3 d, ~840mi RT)", amount: 1800, color: "red" },
-      { label: "Lodging (2 nt × $192 GSA Santa Clara × 6 rooms)", amount: 2300, color: "yellow" },
-      { label: "Transportation (parking, tolls, on-site moves)", amount: 900, color: "green" },
-      { label: "Meals (11 pax × ~$227/d, under GSA $230 cap)", amount: 2500, color: "blue" },
+      {
+        label: "Vans & fuel",
+        amount: 1800,
+        color: "red",
+        math: "2 vans × $139/d × 3 d + fuel (~840mi RT)",
+        source: "Kayak",
+      },
+      {
+        label: "Lodging",
+        amount: 2300,
+        color: "yellow",
+        math: "2 nt × $192 GSA Santa Clara × 6 rooms",
+        source: "GSA",
+      },
+      {
+        label: "On-site transportation",
+        amount: 900,
+        color: "green",
+        math: "Parking + tolls + on-site shuttle",
+        source: "Bench",
+      },
+      {
+        label: "Meals",
+        amount: 2500,
+        color: "blue",
+        math: "11 pax × ~$227/d (under $230 GSA cap)",
+        source: "GSA",
+      },
+    ],
+    outcomes: [
+      { headline: "10", sublabel: "Silicon Valley seats per cohort" },
+      { headline: "3", sublabel: "Institutions: Googleplex · Stanford · SJSU" },
     ],
     accent: "red",
   },
@@ -93,10 +168,38 @@ export const LINE_ITEMS: LineItem[] = [
     outcome:
       "Functional projects for portfolios, hands-on mastery of Google tooling, and direct connections with industry mentors and recruiters.",
     expenses: [
-      { label: "Catering — meals + coffee (100 pax × ~$15, MLH bench)", amount: 1500, color: "yellow" },
-      { label: "Swag (100 shirts × ~$7 screen-print)", amount: 700, color: "green" },
-      { label: "Tech & prizes (HW kits, AV, prize cards)", amount: 250, color: "blue" },
-      { label: "Marketing & banners", amount: 50, color: "red" },
+      {
+        label: "Catering — meals + coffee",
+        amount: 1500,
+        color: "yellow",
+        math: "100 pax × ~$15 (MLH organizer bench)",
+        source: "MLH",
+      },
+      {
+        label: "Swag",
+        amount: 700,
+        color: "green",
+        math: "100 shirts × ~$7 bulk screen-print",
+        source: "Market",
+      },
+      {
+        label: "Tech & prizes",
+        amount: 250,
+        color: "blue",
+        math: "HW kits + AV + winner prize cards",
+        source: "Bench",
+      },
+      {
+        label: "Marketing & banners",
+        amount: 50,
+        color: "red",
+        math: "Print banners + flyer reprints",
+        source: "Bench",
+      },
+    ],
+    outcomes: [
+      { headline: "100+", sublabel: "Builders fed across a 24-hour sprint" },
+      { headline: "1", sublabel: "SoCal flagship · cross-campus reach" },
     ],
     accent: "green",
   },
