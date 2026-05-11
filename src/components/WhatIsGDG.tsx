@@ -6,6 +6,7 @@ import { GDG_FACTS, GDG_PILLARS, RCC_CHAPTER } from "../data/gdg";
 import { CLUB_FACTS } from "../data/budget";
 import { BrandImage } from "./BrandImage";
 import { ChapterMarker } from "./ChapterMarker";
+import { RareSeat } from "./RareSeat";
 import { SplitTitle } from "./SplitTitle";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -355,6 +356,8 @@ export function WhatIsGDG() {
               </a>
             </div>
           </article>
+
+          <RareSeat />
         </div>
       </div>
     </section>

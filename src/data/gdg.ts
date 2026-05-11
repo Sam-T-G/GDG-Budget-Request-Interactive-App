@@ -55,3 +55,33 @@ export const RCC_CHAPTER = {
   region: "Inland Empire, California",
   link: "https://gdg.community.dev/",
 };
+
+/**
+ * Rare-seat framing — RCC sits in a global GDG roster overwhelmingly
+ * populated by four-year universities. Other chapter leads Sam works
+ * with on calls are at research universities and polytechnics. Community
+ * college chapters are the exception.
+ */
+export const RARE_SEAT = {
+  eyebrow: "Rare seat",
+  title: "RCC, in a room of universities.",
+  bigStat: "1",
+  bigStatLabel: "of 1,000+ chapters globally",
+  body:
+    "Almost every chapter on the global GDG roster is a four-year university — Stanford, Berkeley, MIT, the polytechnics, the state flagships. Community college chapters are the exception. RCC holds one of those seats.",
+  footnote: "The Inland Empire on a map dominated by university towns.",
+  /** Generic university-type chips that surround the highlighted RCC tile. */
+  peerLabels: [
+    "Research U.",
+    "State Univ.",
+    "Polytechnic",
+    "Inst. of Tech.",
+    "Engineering",
+    "Public R1",
+    "Univ. — Public",
+    "Liberal Arts",
+    "Univ. — Private",
+    "Flagship U.",
+    "Univ. — Global",
+  ],
+};
