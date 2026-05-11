@@ -49,7 +49,7 @@ Used by the `GoogleIO` section that closes the chapter highlights block. The com
 
 | Filename | Subject | Source | License | Credit |
 |---|---|---|---|---|
-| `pichai.jpg` | Sundar Pichai, 2023 (cropped) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Sundar_Pichai_(2023)_cropped_2.jpg) | CC BY 4.0 | © European Union, 2023 · Lukasz Kobus |
+| `pichai.jpg` | Sundar Pichai, 2023 (cropped — same image used as the lead on the English Wikipedia article) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Sundar_Pichai_-_2023_(cropped).jpg) | CC BY 4.0 | © European Union, 2023 · Lukasz Kobus |
 | `hassabis.jpg` | Demis Hassabis, 2025 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Demis_Hassabis_in_2025_by_Christopher_Michel.jpg) | CC BY-SA 4.0 | Christopher Michel |
 
 #### Event + venue photos (carousel)
