@@ -52,9 +52,10 @@ export function GoogleIO() {
       gsap.set(".js-hook-head", { autoAlpha: 0, y: 18, filter: "blur(6px)" });
       gsap.set(".js-hook-body", { autoAlpha: 0, y: 10 });
 
-      gsap.set(".js-coverage-tile", { autoAlpha: 0, y: 24, scale: 0.96 });
-      gsap.set(".js-attendee-card", { autoAlpha: 0, y: 18 });
+      gsap.set(".js-video-frame", { autoAlpha: 0, y: 28, scale: 0.97 });
+      gsap.set(".js-video-cap", { autoAlpha: 0, y: 8 });
 
+      gsap.set(".js-coverage-tile", { autoAlpha: 0, y: 24, scale: 0.96 });
       gsap.set(".js-photo-head", { autoAlpha: 0, y: 12 });
       gsap.set(".js-photo-card", { autoAlpha: 0, y: 22, scale: 0.97 });
 
@@ -133,6 +134,26 @@ export function GoogleIO() {
         },
       });
 
+      // VIDEO
+      ScrollTrigger.create({
+        trigger: ".js-io-video",
+        start: "top 80%",
+        once: true,
+        onEnter: () => {
+          const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+          tl.to(".js-video-frame", {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: reduced ? 0.01 : 0.8,
+          }).to(
+            ".js-video-cap",
+            { autoAlpha: 1, y: 0, duration: reduced ? 0.01 : 0.45 },
+            "-=0.3",
+          );
+        },
+      });
+
       // COVERAGE
       ScrollTrigger.create({
         trigger: ".js-io-coverage",
@@ -146,22 +167,6 @@ export function GoogleIO() {
             duration: reduced ? 0.01 : 0.55,
             stagger: reduced ? 0 : 0.08,
             ease: "back.out(1.5)",
-          });
-        },
-      });
-
-      // ATTENDEES
-      ScrollTrigger.create({
-        trigger: ".js-io-attendees",
-        start: "top 80%",
-        once: true,
-        onEnter: () => {
-          gsap.to(".js-attendee-card", {
-            autoAlpha: 1,
-            y: 0,
-            duration: reduced ? 0.01 : 0.55,
-            stagger: reduced ? 0 : 0.1,
-            ease: "power3.out",
           });
         },
       });
@@ -352,8 +357,28 @@ export function GoogleIO() {
         </div>
       </div>
 
+      {/* === VIDEO === */}
+      <div className="js-io-video bg-gdg-ink px-5 pb-12 sm:px-8">
+        <div className="mx-auto max-w-xl">
+          <div className="js-video-frame relative aspect-video overflow-hidden rounded-2xl bg-black shadow-lift ring-1 ring-white/10">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/LxvErFkBXPk?rel=0"
+              title="Google I/O"
+              className="absolute inset-0 h-full w-full"
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          </div>
+          <p className="js-video-cap mt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-white/45">
+            Google I/O · official recap
+          </p>
+        </div>
+      </div>
+
       {/* === COVERAGE === */}
-      <div className="js-io-coverage bg-gdg-ink px-5 pb-12 sm:px-8">
+      <div className="js-io-coverage bg-gdg-ink px-5 pb-12 pt-10 sm:px-8">
         <div className="mx-auto max-w-xl">
           <p className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/55">
             What Google is covering
@@ -383,58 +408,6 @@ export function GoogleIO() {
         </div>
       </div>
 
-      {/* === ATTENDEES === */}
-      <div className="js-io-attendees bg-gdg-ink px-5 pb-16 sm:px-8 sm:pb-20">
-        <div className="mx-auto max-w-xl">
-          <p className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/55">
-            The two seats
-          </p>
-          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {GOOGLE_IO.attendees.map((a, i) => (
-              <div
-                key={a.name}
-                className="js-attendee-card relative overflow-hidden rounded-2xl bg-white p-4 shadow-lift"
-              >
-                <span
-                  aria-hidden
-                  className="absolute left-0 top-0 h-full w-1"
-                  style={{
-                    background:
-                      i === 0
-                        ? "linear-gradient(180deg, #4285F4, #34A853)"
-                        : "linear-gradient(180deg, #FBBC04, #EA4335)",
-                  }}
-                />
-                <div className="flex items-center gap-3 pl-2">
-                  <div
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-white shadow-soft"
-                    style={{
-                      background:
-                        i === 0
-                          ? "linear-gradient(135deg, #4285F4, #34A853)"
-                          : "linear-gradient(135deg, #FBBC04, #EA4335)",
-                    }}
-                    aria-hidden
-                  >
-                    <span className="font-display text-sm font-bold tracking-wide">
-                      {a.initials}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="font-display text-base font-bold leading-tight text-gdg-ink">
-                      {a.name}
-                    </p>
-                    <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-gdg-mute">
-                      {a.role}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/* === PHOTO CAROUSEL === */}
       <div className="js-io-photos relative bg-white pb-14 pt-16 sm:pt-20">
         <div className="js-photo-head mx-auto max-w-xl px-5 sm:px-8">
@@ -445,7 +418,7 @@ export function GoogleIO() {
             </p>
           </div>
           <h3 className="mt-3 font-display text-3xl font-bold leading-[1.05] tracking-tight text-gdg-ink sm:text-4xl">
-            Mountain View.
+            Silicon Valley.
           </h3>
           <p className="mt-3 max-w-md text-sm leading-relaxed text-gdg-ink/70">
             Five days inside Google's campus and at Shoreline Amphitheatre. The same ground that hosts every major Google announcement.

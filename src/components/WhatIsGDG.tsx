@@ -26,20 +26,53 @@ const PILLAR_TEXT: Record<"blue" | "red" | "yellow" | "green", string> = {
 };
 
 /**
- * Cinematic chapter grid: every dot is one of the 1,000+ GDG chapters.
- * Riverside is highlighted as a single yellow, pulsing dot — concrete proof
- * of scale rather than an abstract continent shape.
+ * Cinematic world map: every dot is one of the 1,000+ GDG chapters,
+ * placed geographically on a stylized equirectangular world bitmap.
+ * Riverside is highlighted as a single yellow, pulsing dot at its true
+ * latitude/longitude — concrete proof of global scale.
+ *
+ * Each row is exactly 40 chars: '#' = land, '.' = water.
+ * Columns span -180° to +180° longitude (9° each);
+ * rows span +85° to -60° latitude (~5.8° each).
  */
 const GRID_COLS = 40;
 const GRID_ROWS = 25;
-const GRID_TOTAL = GRID_COLS * GRID_ROWS; // exactly 1000
 const GRID_GAP = 14;
 const DOT_R = 1.6;
 const GRID_W = GRID_COLS * GRID_GAP;
 const GRID_H = GRID_ROWS * GRID_GAP;
 
+const WORLD_ROWS = [
+  "........................................",
+  "..............##........................",
+  ".......##....####........###############",
+  "...##.######..####..####################",
+  "..###############...####################",
+  "....##########.....#####################",
+  "....#########......#####################",
+  ".....########......#####################",
+  "......#######......########.######.#####",
+  ".......######......#######..########....",
+  ".........###........######.####.###.....",
+  "..........###.......######.####.####....",
+  "...........###......####...###..###.....",
+  "............###....#######.....####.....",
+  ".............####...####.......#####....",
+  ".............####...####........######..",
+  ".............####....####........#####..",
+  "..............###.....###........#####..",
+  "..............##......###........#####..",
+  ".............###......##.........####...",
+  ".............##.......#...........##....",
+  ".............##.......................##",
+  ".............#..........................",
+  "........................................",
+  "........................................",
+];
+
+// Riverside, CA → ~34°N, -117°W → col 7, row 9 (Southern California)
 const RCC_COL = 7;
-const RCC_ROW = 15;
+const RCC_ROW = 9;
 const RCC_INDEX = RCC_ROW * GRID_COLS + RCC_COL;
 const rccCx = RCC_COL * GRID_GAP + GRID_GAP / 2;
 const rccCy = RCC_ROW * GRID_GAP + GRID_GAP / 2;
@@ -50,10 +83,10 @@ const hashChannel = (i: number) => ((i * 2654435761) >>> 0) % 100;
 
 const dotColor = (i: number): string | null => {
   const h = hashChannel(i);
-  if (h < 3) return COLOR_PALETTE[0];
-  if (h < 6) return COLOR_PALETTE[1];
-  if (h < 9) return COLOR_PALETTE[2];
-  if (h < 12) return COLOR_PALETTE[3];
+  if (h < 4) return COLOR_PALETTE[0];
+  if (h < 8) return COLOR_PALETTE[1];
+  if (h < 12) return COLOR_PALETTE[2];
+  if (h < 16) return COLOR_PALETTE[3];
   return null;
 };
 
@@ -537,15 +570,14 @@ export function WhatIsGDG() {
               chapters.
             </p>
             <p className="js-scale-meta mt-3 max-w-md text-sm leading-relaxed text-white/70">
-              GDG runs on every populated continent — {GDG_FACTS.globalContinents}{" "}
-              in total — and ships hands-on training inside{" "}
+              GDG runs on every populated continent and ships hands-on training inside{" "}
               <span className="text-white">{GDG_FACTS.globalCountries}+ countries</span>{" "}
               every academic year.
             </p>
           </div>
 
           {/* Cities marquee — full-bleed */}
-          <div className="js-cities-band relative mt-12 overflow-hidden border-y border-white/10 py-4">
+          <div className="js-cities-band relative mt-12 overflow-hidden border-y border-white/15 bg-black/55 py-4 backdrop-blur-md">
             <div
               aria-hidden
               className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-black to-transparent"
@@ -581,7 +613,7 @@ export function WhatIsGDG() {
 
           {/* Stat triplet */}
           <div className="mx-auto mt-10 grid max-w-xl grid-cols-3 gap-3 sm:gap-4">
-            <div className="js-scale-stat rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur">
+            <div className="js-scale-stat rounded-2xl border border-white/15 bg-black/55 p-4 backdrop-blur-md">
               <p
                 className="font-display text-2xl font-bold leading-none tabular-nums sm:text-3xl"
                 style={{
@@ -594,20 +626,20 @@ export function WhatIsGDG() {
               >
                 {GDG_FACTS.globalChaptersDisplay}
               </p>
-              <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.18em] text-white/55">
+              <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.18em] text-white/70">
                 Chapters
               </p>
             </div>
-            <div className="js-scale-stat rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur">
+            <div className="js-scale-stat rounded-2xl border border-white/15 bg-black/55 p-4 backdrop-blur-md">
               <p className="font-display text-2xl font-bold leading-none tabular-nums text-gdg-yellow sm:text-3xl">
                 <span ref={countriesRef}>0</span>
-                <span className="text-white/50">+</span>
+                <span className="text-white/60">+</span>
               </p>
-              <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.18em] text-white/55">
+              <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.18em] text-white/70">
                 Countries
               </p>
             </div>
-            <div className="js-scale-stat rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur">
+            <div className="js-scale-stat rounded-2xl border border-white/15 bg-black/55 p-4 backdrop-blur-md">
               <p
                 className="font-display text-2xl font-bold leading-none tabular-nums sm:text-3xl"
                 style={{
@@ -619,13 +651,13 @@ export function WhatIsGDG() {
               >
                 {GDG_FACTS.globalContinents}
               </p>
-              <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.18em] text-white/55">
+              <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.18em] text-white/70">
                 Continents
               </p>
             </div>
           </div>
 
-          {/* Chapter grid — every dot is one of 1,000+ chapters */}
+          {/* Chapter world map — every dot is one of 1,000+ chapters, placed geographically */}
           <div className="relative mx-auto mt-14 w-full max-w-2xl">
             <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.22em] text-white/45">
               Every dot is a chapter
@@ -635,37 +667,39 @@ export function WhatIsGDG() {
               width="100%"
               height="auto"
               role="img"
-              aria-label="A grid of one thousand dots, each representing one Google Developer Groups chapter, with Riverside City College highlighted in yellow"
+              aria-label="A dotted world map where each dot marks a Google Developer Groups chapter, with Riverside City College highlighted in yellow"
               className="block"
               preserveAspectRatio="xMidYMid meet"
             >
-              {Array.from({ length: GRID_TOTAL }).map((_, i) => {
-                if (i === RCC_INDEX) return null;
-                const col = i % GRID_COLS;
-                const row = Math.floor(i / GRID_COLS);
-                const cx = col * GRID_GAP + GRID_GAP / 2;
-                const cy = row * GRID_GAP + GRID_GAP / 2;
-                const color = dotColor(i);
-                const isColored = color !== null;
-                return (
-                  <circle
-                    key={i}
-                    className={`js-grid-dot${isColored ? " js-grid-color" : ""}`}
-                    cx={cx}
-                    cy={cy}
-                    r={isColored ? DOT_R * 1.25 : DOT_R}
-                    fill={color ?? "rgba(255,255,255,0.22)"}
-                  />
-                );
-              })}
+              {WORLD_ROWS.flatMap((rowStr, row) =>
+                rowStr.split("").map((cell, col) => {
+                  if (cell !== "#") return null;
+                  const i = row * GRID_COLS + col;
+                  if (i === RCC_INDEX) return null;
+                  const cx = col * GRID_GAP + GRID_GAP / 2;
+                  const cy = row * GRID_GAP + GRID_GAP / 2;
+                  const color = dotColor(i);
+                  const isColored = color !== null;
+                  return (
+                    <circle
+                      key={i}
+                      className={`js-grid-dot${isColored ? " js-grid-color" : ""}`}
+                      cx={cx}
+                      cy={cy}
+                      r={isColored ? DOT_R * 1.4 : DOT_R}
+                      fill={color ?? "rgba(255,255,255,0.45)"}
+                    />
+                  );
+                }),
+              )}
 
-              {/* RCC connecting line */}
+              {/* RCC connecting line — drops into the Pacific (down-left) to clear N. American land dots */}
               <line
                 className="js-rcc-callout"
                 x1={rccCx}
                 y1={rccCy}
-                x2={rccCx + 26}
-                y2={rccCy - 18}
+                x2={rccCx - 32}
+                y2={rccCy + 36}
                 stroke="#FBBC04"
                 strokeWidth={0.6}
                 strokeLinecap="round"
@@ -690,8 +724,8 @@ export function WhatIsGDG() {
               {/* RCC label (anchored inside SVG, scales with grid) */}
               <g className="js-rcc-callout">
                 <text
-                  x={rccCx + 28}
-                  y={rccCy - 22}
+                  x={rccCx - 36}
+                  y={rccCy + 50}
                   fill="#FBBC04"
                   style={{
                     fontFamily:
@@ -705,9 +739,9 @@ export function WhatIsGDG() {
                   RCC · Riverside, CA
                 </text>
                 <text
-                  x={rccCx + 28}
-                  y={rccCy - 11}
-                  fill="rgba(255,255,255,0.65)"
+                  x={rccCx - 36}
+                  y={rccCy + 61}
+                  fill="rgba(255,255,255,0.7)"
                   style={{
                     fontFamily:
                       "'JetBrains Mono', ui-monospace, SFMono-Regular, monospace",
