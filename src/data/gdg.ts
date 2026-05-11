@@ -22,9 +22,38 @@ export const GDG_FACTS = {
   globalChapters: 1000,
   globalChaptersDisplay: "1,000+",
   globalCountries: 140,
+  globalContinents: 6,
   parentProgram: "Google for Developers",
   platform: "Bevy (gdg.community.dev)",
 };
+
+/**
+ * A curated, verifiable sample of cities where GDG / GDG on Campus chapters
+ * are active — drawn from the public chapter directory at gdg.community.dev.
+ * Used in the cinematic Scale section to give the "1,000+ chapters" claim
+ * concrete, recognizable geography. Riverside is intentionally placed last
+ * so it lands as the punchline.
+ */
+export const GDG_CITIES = [
+  "Bengaluru",
+  "Lagos",
+  "São Paulo",
+  "Tokyo",
+  "Berlin",
+  "Nairobi",
+  "Jakarta",
+  "Mexico City",
+  "Seoul",
+  "Sydney",
+  "Cairo",
+  "Toronto",
+  "London",
+  "Mumbai",
+  "Istanbul",
+  "Buenos Aires",
+  "Manila",
+  "Riverside",
+];
 
 export const GDG_PILLARS: { title: string; body: string; color: "blue" | "red" | "yellow" | "green" }[] = [
   {

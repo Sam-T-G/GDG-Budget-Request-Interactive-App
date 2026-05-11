@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { GDG_FACTS, GDG_PILLARS, RCC_CHAPTER } from "../data/gdg";
+import { GDG_CITIES, GDG_FACTS, GDG_PILLARS, RCC_CHAPTER } from "../data/gdg";
 import { CLUB_FACTS } from "../data/budget";
 import { BrandImage } from "./BrandImage";
 import { ChapterMarker } from "./ChapterMarker";
@@ -71,8 +71,12 @@ export function WhatIsGDG() {
       gsap.set(".js-quote-mark", { autoAlpha: 0, scale: 0.5, rotation: -10 });
 
       gsap.set(".js-scale-eyebrow", { autoAlpha: 0, y: 10 });
-      gsap.set(".js-scale-counter", { autoAlpha: 0, scale: 0.94, filter: "blur(10px)" });
-      gsap.set(".js-scale-sub", { autoAlpha: 0, y: 12 });
+      gsap.set(".js-scale-bignum", { autoAlpha: 0, scale: 0.86, filter: "blur(18px)" });
+      gsap.set(".js-scale-chapters", { autoAlpha: 0, y: 16, filter: "blur(8px)" });
+      gsap.set(".js-scale-meta", { autoAlpha: 0, y: 10 });
+      gsap.set(".js-scale-stat", { autoAlpha: 0, y: 20 });
+      gsap.set(".js-cities-band", { autoAlpha: 0 });
+      gsap.set(".js-scale-glow", { autoAlpha: 0, scale: 0.6 });
       gsap.set(".js-dot", { autoAlpha: 0, scale: 0 });
       gsap.set(".js-arc", { strokeDasharray: 220, strokeDashoffset: 220 });
       gsap.set(".js-mv-core", { autoAlpha: 0, scale: 0 });
@@ -127,43 +131,76 @@ export function WhatIsGDG() {
         },
       });
 
-      // ACT II — Scale (dramatic)
+      // ACT II — Scale (cinematic)
       ScrollTrigger.create({
         trigger: ".js-act-ii",
-        start: "top 70%",
+        start: "top 75%",
         once: true,
         onEnter: () => {
           const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-          tl.to(".js-scale-eyebrow", {
+          tl.to(".js-scale-glow", {
             autoAlpha: 1,
-            y: 0,
-            duration: reduced ? 0.01 : 0.5,
+            scale: 1,
+            duration: reduced ? 0.01 : 1.6,
+            ease: "power2.out",
           })
             .to(
-              ".js-scale-counter",
+              ".js-scale-eyebrow",
+              { autoAlpha: 1, y: 0, duration: reduced ? 0.01 : 0.45 },
+              "-=1.3",
+            )
+            .to(
+              ".js-scale-bignum",
               {
                 autoAlpha: 1,
                 scale: 1,
                 filter: "blur(0px)",
-                duration: reduced ? 0.01 : 1.0,
+                duration: reduced ? 0.01 : 1.2,
+                ease: "power4.out",
               },
-              "-=0.2",
+              "-=1.0",
             )
             .to(
-              ".js-scale-sub",
+              ".js-scale-chapters",
+              {
+                autoAlpha: 1,
+                y: 0,
+                filter: "blur(0px)",
+                duration: reduced ? 0.01 : 0.65,
+              },
+              "-=0.55",
+            )
+            .to(
+              ".js-scale-meta",
               { autoAlpha: 1, y: 0, duration: reduced ? 0.01 : 0.55 },
-              "-=0.5",
+              "-=0.4",
+            )
+            .to(
+              ".js-cities-band",
+              { autoAlpha: 1, duration: reduced ? 0.01 : 0.6 },
+              "-=0.3",
+            )
+            .to(
+              ".js-scale-stat",
+              {
+                autoAlpha: 1,
+                y: 0,
+                duration: reduced ? 0.01 : 0.55,
+                stagger: reduced ? 0 : 0.1,
+                ease: "back.out(1.6)",
+              },
+              "-=0.3",
             )
             .to(
               ".js-dot",
               {
                 autoAlpha: 1,
                 scale: 1,
-                duration: reduced ? 0.01 : 0.55,
-                stagger: { each: reduced ? 0 : 0.01, from: "random" },
+                duration: reduced ? 0.01 : 0.5,
+                stagger: { each: reduced ? 0 : 0.008, from: "random" },
                 ease: "back.out(2)",
               },
-              "-=0.5",
+              "-=0.3",
             )
             .to(
               ".js-arc",
@@ -225,12 +262,12 @@ export function WhatIsGDG() {
               "-=0.1",
             );
 
-          // Counter tweens
+          // Mega chapter counter
           const chapters = { val: 0 };
           gsap.to(chapters, {
             val: GDG_FACTS.globalChapters,
-            duration: reduced ? 0.01 : 1.8,
-            delay: 0.3,
+            duration: reduced ? 0.01 : 2.2,
+            delay: 0.5,
             ease: "power2.out",
             onUpdate: () => {
               if (counterRef.current) {
@@ -238,11 +275,12 @@ export function WhatIsGDG() {
               }
             },
           });
+          // Countries counter (in the stat tile)
           const countries = { val: 0 };
           gsap.to(countries, {
             val: GDG_FACTS.globalCountries,
-            duration: reduced ? 0.01 : 1.4,
-            delay: 0.6,
+            duration: reduced ? 0.01 : 1.6,
+            delay: 1.4,
             ease: "power2.out",
             onUpdate: () => {
               if (countriesRef.current) {
@@ -252,6 +290,14 @@ export function WhatIsGDG() {
           });
 
           if (!reduced) {
+            // Slowly drifting backdrop glow
+            gsap.to(".js-scale-glow", {
+              rotate: 360,
+              duration: 42,
+              repeat: -1,
+              ease: "none",
+              transformOrigin: "50% 50%",
+            });
             // Continuous gentle pulse at Riverside node
             gsap.to(".js-rvs-halo", {
               scale: 1.6,
@@ -261,6 +307,22 @@ export function WhatIsGDG() {
               ease: "power2.out",
               delay: 1.6,
             });
+            // Marquee scroll
+            const track = root.current?.querySelector<HTMLDivElement>(
+              ".js-cities-track",
+            );
+            if (track) {
+              gsap.fromTo(
+                track,
+                { xPercent: 0 },
+                {
+                  xPercent: -50,
+                  duration: 38,
+                  ease: "none",
+                  repeat: -1,
+                },
+              );
+            }
           }
         },
       });
@@ -413,54 +475,172 @@ export function WhatIsGDG() {
         </div>
       </div>
 
-      {/* ACT II — Scale (full-bleed dark) */}
-      <div className="js-act-ii relative overflow-hidden bg-gdg-ink py-16 sm:py-20">
+      {/* ACT II — Scale (cinematic full-bleed) */}
+      <div className="js-act-ii relative overflow-hidden bg-black">
+        {/* Rotating gradient glow */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-30 blur-3xl"
+          className="js-scale-glow pointer-events-none absolute left-1/2 top-1/2 h-[140vw] w-[140vw] max-h-[1100px] max-w-[1100px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 blur-3xl"
           style={{
             background:
-              "radial-gradient(circle at 18% 25%, #4285F4 0%, transparent 36%), radial-gradient(circle at 82% 75%, #34A853 0%, transparent 36%), radial-gradient(circle at 50% 50%, #FBBC04 0%, transparent 30%)",
+              "conic-gradient(from 200deg at 50% 50%, #4285F4 0deg, #34A853 90deg, #FBBC04 180deg, #EA4335 270deg, #4285F4 360deg)",
+          }}
+        />
+        {/* Subtle starfield veil */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.35]"
+          style={{
+            backgroundImage:
+              "radial-gradient(rgba(255,255,255,0.55) 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
+            backgroundPosition: "0 0",
+            maskImage:
+              "radial-gradient(ellipse at 50% 50%, black 30%, transparent 75%)",
+            WebkitMaskImage:
+              "radial-gradient(ellipse at 50% 50%, black 30%, transparent 75%)",
+          }}
+        />
+        {/* Soft dark vignette at top + bottom edges */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, transparent 18%, transparent 82%, rgba(0,0,0,0.55) 100%)",
           }}
         />
 
-        <div className="relative mx-auto max-w-xl px-5 sm:px-8">
-          <div className="js-scale-eyebrow flex items-center gap-2">
-            <span aria-hidden className="inline-block h-2 w-2 rounded-full bg-gdg-yellow" />
-            <p className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-white/70">
-              Global reach
+        <div className="relative px-5 pb-16 pt-20 sm:px-8 sm:pb-24 sm:pt-28">
+          <div className="mx-auto max-w-xl">
+            <div className="js-scale-eyebrow flex items-center gap-2">
+              <span
+                aria-hidden
+                className="inline-block h-2 w-2 rounded-full"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #4285F4 0%, #34A853 33%, #FBBC04 66%, #EA4335 100%)",
+                }}
+              />
+              <p className="font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-white/70">
+                Global reach · {new Date().getFullYear()}
+              </p>
+            </div>
+
+            {/* Mega counter */}
+            <div className="js-scale-bignum mt-6 sm:mt-8">
+              <span
+                ref={counterRef}
+                className="block font-display font-bold leading-[0.86] tabular-nums"
+                style={{
+                  fontSize: "clamp(5.5rem, 32vw, 13rem)",
+                  letterSpacing: "-0.05em",
+                  backgroundImage:
+                    "linear-gradient(135deg, #4285F4 0%, #34A853 32%, #FBBC04 64%, #EA4335 100%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                  textShadow: "0 0 60px rgba(66,133,244,0.15)",
+                }}
+              >
+                0+
+              </span>
+            </div>
+
+            <p className="js-scale-chapters mt-3 font-display text-2xl font-bold leading-tight tracking-tight text-white sm:text-3xl">
+              chapters.
+            </p>
+            <p className="js-scale-meta mt-3 max-w-md text-sm leading-relaxed text-white/70">
+              GDG runs on every populated continent — {GDG_FACTS.globalContinents}{" "}
+              in total — and ships hands-on training inside{" "}
+              <span className="text-white">{GDG_FACTS.globalCountries}+ countries</span>{" "}
+              every academic year.
             </p>
           </div>
 
-          <div className="js-scale-counter mt-5">
-            <span
-              ref={counterRef}
-              className="block font-display text-[5.5rem] font-bold leading-[0.95] tabular-nums text-white sm:text-[7rem]"
-              style={{ letterSpacing: "-0.045em" }}
-            >
-              0+
-            </span>
-            <p className="mt-1 font-mono text-[11px] font-medium uppercase tracking-[0.22em] text-white/55">
-              chapters worldwide
-            </p>
+          {/* Cities marquee — full-bleed */}
+          <div className="js-cities-band relative mt-12 overflow-hidden border-y border-white/10 py-4">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-black to-transparent"
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-black to-transparent"
+            />
+            <div className="js-cities-track flex w-max">
+              {[0, 1].map((copy) => (
+                <div key={copy} className="flex shrink-0 items-center gap-8 px-4">
+                  {GDG_CITIES.map((city, i) => {
+                    const isHome = city === "Riverside";
+                    return (
+                      <span
+                        key={`${copy}-${i}`}
+                        className={`flex shrink-0 items-center gap-8 font-display text-xl font-semibold tracking-tight sm:text-2xl ${
+                          isHome ? "text-gdg-yellow" : "text-white/55"
+                        }`}
+                      >
+                        <span className="whitespace-nowrap">{city}</span>
+                        <span
+                          aria-hidden
+                          className="inline-block h-1 w-1 rounded-full bg-white/30"
+                        />
+                      </span>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="js-scale-sub mt-6 flex items-baseline gap-3 border-t border-white/10 pt-5">
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/45">
-              In
-            </span>
-            <span
-              ref={countriesRef}
-              className="font-display text-4xl font-bold tabular-nums text-gdg-yellow"
-            >
-              0
-            </span>
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/45">
-              countries
-            </span>
+          {/* Stat triplet */}
+          <div className="mx-auto mt-10 grid max-w-xl grid-cols-3 gap-3 sm:gap-4">
+            <div className="js-scale-stat rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur">
+              <p
+                className="font-display text-2xl font-bold leading-none tabular-nums sm:text-3xl"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(135deg, #4285F4, #34A853)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                }}
+              >
+                {GDG_FACTS.globalChaptersDisplay}
+              </p>
+              <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.18em] text-white/55">
+                Chapters
+              </p>
+            </div>
+            <div className="js-scale-stat rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur">
+              <p className="font-display text-2xl font-bold leading-none tabular-nums text-gdg-yellow sm:text-3xl">
+                <span ref={countriesRef}>0</span>
+                <span className="text-white/50">+</span>
+              </p>
+              <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.18em] text-white/55">
+                Countries
+              </p>
+            </div>
+            <div className="js-scale-stat rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur">
+              <p
+                className="font-display text-2xl font-bold leading-none tabular-nums sm:text-3xl"
+                style={{
+                  backgroundImage: "linear-gradient(135deg, #FBBC04, #EA4335)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                }}
+              >
+                {GDG_FACTS.globalContinents}
+              </p>
+              <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.18em] text-white/55">
+                Continents
+              </p>
+            </div>
           </div>
 
-          <div className="relative mt-10 -mx-2">
+          {/* Globe / arc map */}
+          <div className="relative mx-auto mt-14 max-w-xl">
             <svg
               viewBox={`0 0 ${SVG_W} ${SVG_H}`}
               width="100%"
@@ -544,7 +724,7 @@ export function WhatIsGDG() {
             </div>
           </div>
 
-          <p className="js-handoff mt-12 font-display text-3xl font-bold leading-[1.05] tracking-tight text-white sm:text-4xl">
+          <p className="js-handoff mx-auto mt-14 max-w-xl font-display text-3xl font-bold leading-[1.05] tracking-tight text-white sm:text-4xl">
             Now, one of those chapters is{" "}
             <span className="text-gdg-yellow">here.</span>
           </p>

@@ -1,22 +1,14 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
-import { QRCodeSVG } from "qrcode.react";
 import { CLUB_FACTS, TOTAL_REQUEST } from "../data/budget";
 import { GDG_FACTS } from "../data/gdg";
 import { AnimatedCounter } from "./AnimatedCounter";
 import { GDGWordmark } from "./GDGWordmark";
 import { SplitTitle } from "./SplitTitle";
-import { haptic } from "../hooks/useHaptic";
 
 export function Hero() {
   const root = useRef<HTMLElement>(null);
-  const [showQR, setShowQR] = useState(false);
-
-  const url =
-    typeof window !== "undefined"
-      ? window.location.href
-      : "https://sam-t-g.github.io/GDG-Budget-Request-Interactive-App/";
 
   useGSAP(
     () => {
@@ -25,13 +17,11 @@ export function Hero() {
       gsap.set(".js-eyebrow", { autoAlpha: 0, y: -8 });
       gsap.set(".js-subtitle", { autoAlpha: 0, y: 12 });
       gsap.set(".js-counter-card", { autoAlpha: 0, y: 28, scale: 0.96 });
-      gsap.set(".js-cta", { autoAlpha: 0, y: 12 });
 
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
       tl.to(".js-eyebrow", { autoAlpha: 1, y: 0, duration: reduced ? 0.01 : 0.5, delay: 0.1 })
         .to(".js-subtitle", { autoAlpha: 1, y: 0, duration: reduced ? 0.01 : 0.5 }, "+=0.4")
-        .to(".js-counter-card", { autoAlpha: 1, y: 0, scale: 1, duration: reduced ? 0.01 : 0.7 }, "-=0.2")
-        .to(".js-cta", { autoAlpha: 1, y: 0, duration: reduced ? 0.01 : 0.4, stagger: reduced ? 0 : 0.06 }, "-=0.3");
+        .to(".js-counter-card", { autoAlpha: 1, y: 0, scale: 1, duration: reduced ? 0.01 : 0.7 }, "-=0.2");
     },
     { scope: root },
   );
@@ -112,35 +102,6 @@ export function Hero() {
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => {
-              haptic(10);
-              document.getElementById("ask")?.scrollIntoView({ behavior: "smooth", block: "start" });
-            }}
-            className="js-cta rounded-full bg-gdg-ink px-5 py-2.5 text-sm font-medium text-white shadow-lift transition-transform active:scale-[0.98]"
-          >
-            See the ask →
-          </button>
-          <button
-            onClick={() => {
-              haptic(10);
-              setShowQR((v) => !v);
-            }}
-            className="js-cta rounded-full border border-gdg-line bg-white px-5 py-2.5 text-sm font-medium text-gdg-ink transition-transform active:scale-[0.98]"
-          >
-            {showQR ? "Hide QR" : "Share via QR"}
-          </button>
-        </div>
-
-        {showQR && (
-          <div className="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-soft">
-            <QRCodeSVG value={url} size={112} bgColor="#FFFFFF" fgColor="#1F1F1F" level="M" />
-            <div className="text-sm text-gdg-mute">
-              Point a phone camera here to follow along on this page.
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );
