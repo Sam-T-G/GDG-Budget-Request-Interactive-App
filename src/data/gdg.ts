@@ -62,26 +62,37 @@ export const RCC_CHAPTER = {
  * with on calls are at research universities and polytechnics. Community
  * college chapters are the exception.
  */
+export type RareSeatPeer = {
+  name: string;
+  short: string;
+  file: string;
+};
+
 export const RARE_SEAT = {
   eyebrow: "Rare seat",
   title: "RCC, in a room of universities.",
   bigStat: "1",
   bigStatLabel: "of 1,000+ chapters globally",
   body:
-    "Almost every chapter on the global GDG roster is a four-year university — Stanford, Berkeley, MIT, the polytechnics, the state flagships. Community college chapters are the exception. RCC holds one of those seats.",
+    "Almost every chapter on the global GDG roster is a four-year university — Stanford, Berkeley, Yale, ETH Zurich, the state flagships. Community college chapters are the exception. RCC holds one of those seats.",
   footnote: "The Inland Empire on a map dominated by university towns.",
-  /** Generic university-type chips that surround the highlighted RCC tile. */
-  peerLabels: [
-    "Research U.",
-    "State Univ.",
-    "Polytechnic",
-    "Inst. of Tech.",
-    "Engineering",
-    "Public R1",
-    "Univ. — Public",
-    "Liberal Arts",
-    "Univ. — Private",
-    "Flagship U.",
-    "Univ. — Global",
-  ],
+  /**
+   * Confirmed GDG on Campus chapters at notable universities — sourced
+   * directly from the gdg.community.dev directory. Used to surround the
+   * highlighted RCC tile with the kind of peer institutions Sam shares
+   * calls with.
+   */
+  peers: [
+    { name: "Stanford University", short: "Stanford", file: "stanford.svg" },
+    { name: "UC Berkeley", short: "Berkeley", file: "uc-berkeley.svg" },
+    { name: "UCLA", short: "UCLA", file: "ucla.svg" },
+    { name: "Yale University", short: "Yale", file: "yale.svg" },
+    { name: "Columbia University", short: "Columbia", file: "columbia.svg" },
+    { name: "New York University", short: "NYU", file: "nyu.svg" },
+    { name: "ETH Zurich", short: "ETH", file: "eth-zurich.svg" },
+    { name: "Carnegie Mellon", short: "CMU", file: "carnegie-mellon.svg" },
+    { name: "UC San Diego", short: "UCSD", file: "ucsd.svg" },
+    { name: "UC Santa Cruz", short: "UCSC", file: "uc-santa-cruz.svg" },
+    { name: "Cal Poly SLO", short: "Cal Poly", file: "cal-poly.svg" },
+  ] as RareSeatPeer[],
 };

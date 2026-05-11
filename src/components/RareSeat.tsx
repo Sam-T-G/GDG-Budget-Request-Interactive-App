@@ -2,22 +2,26 @@ import { useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { RARE_SEAT } from "../data/gdg";
+import { RARE_SEAT, type RareSeatPeer } from "../data/gdg";
+import { BrandImage } from "./BrandImage";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
+const BASE = import.meta.env.BASE_URL;
 const RCC_INDEX = 6;
+
+type Tile = { kind: "peer"; peer: RareSeatPeer } | { kind: "rcc" };
 
 export function RareSeat() {
   const root = useRef<HTMLDivElement>(null);
 
-  const tiles: Array<{ kind: "peer" | "rcc"; label: string }> = [];
+  const tiles: Tile[] = [];
   let peerCursor = 0;
   for (let i = 0; i < 12; i += 1) {
     if (i === RCC_INDEX) {
-      tiles.push({ kind: "rcc", label: "RCC" });
+      tiles.push({ kind: "rcc" });
     } else {
-      tiles.push({ kind: "peer", label: RARE_SEAT.peerLabels[peerCursor % RARE_SEAT.peerLabels.length] });
+      tiles.push({ kind: "peer", peer: RARE_SEAT.peers[peerCursor] });
       peerCursor += 1;
     }
   }
@@ -62,11 +66,11 @@ export function RareSeat() {
               { autoAlpha: 1, y: 0, duration: reduced ? 0.01 : 0.5 },
               "-=0.25",
             )
-            // Peers swarm in first, slightly dim.
+            // Peers swarm in dim — they're the room, not the spotlight.
             .to(
               ".js-rs-peer",
               {
-                autoAlpha: 0.55,
+                autoAlpha: 0.6,
                 y: 0,
                 scale: 1,
                 duration: reduced ? 0.01 : 0.5,
@@ -75,7 +79,7 @@ export function RareSeat() {
               },
               "-=0.1",
             )
-            // RCC tile lands hard.
+            // RCC lands hard with halo.
             .to(
               ".js-rs-rcc-halo",
               {
@@ -103,7 +107,6 @@ export function RareSeat() {
             );
 
           if (!reduced) {
-            // Continuous pulse on the halo to keep RCC visually live.
             gsap.to(".js-rs-rcc-halo", {
               scale: 1.12,
               autoAlpha: 0.55,
@@ -124,7 +127,6 @@ export function RareSeat() {
       ref={root}
       className="relative mt-6 overflow-hidden rounded-3xl bg-gdg-ink p-5 text-white shadow-lift sm:p-6"
     >
-      {/* Ambient color wash — subtle, just to lift the dark surface */}
       <div
         aria-hidden
         className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full opacity-25 blur-3xl"
@@ -158,17 +160,24 @@ export function RareSeat() {
         {RARE_SEAT.body}
       </p>
 
-      {/* The room — 11 dim university chips + RCC, lit. */}
+      {/* The room — peer university logos surrounding the lit RCC tile. */}
       <div className="relative mt-5 grid grid-cols-3 gap-2">
         {tiles.map((tile, i) =>
           tile.kind === "peer" ? (
             <div
               key={`peer-${i}`}
-              className="js-rs-peer flex aspect-[5/3] items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] px-2"
+              className="js-rs-peer flex aspect-[5/3] items-center justify-center overflow-hidden rounded-xl bg-white/90 p-2"
             >
-              <span className="text-center font-mono text-[9px] uppercase tracking-[0.14em] text-white/45">
-                {tile.label}
-              </span>
+              <BrandImage
+                src={`${BASE}brand/${tile.peer.file}`}
+                alt={`${tile.peer.name} logo`}
+                className="max-h-[70%] max-w-[80%] object-contain"
+                fallback={
+                  <span className="text-center font-mono text-[9px] uppercase tracking-[0.14em] text-gdg-ink/70">
+                    {tile.peer.short}
+                  </span>
+                }
+              />
             </div>
           ) : (
             <div
