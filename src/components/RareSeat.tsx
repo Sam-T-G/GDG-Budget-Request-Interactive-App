@@ -188,13 +188,22 @@ export function RareSeat() {
                 aria-hidden
                 className="js-rs-rcc-halo absolute inset-0 rounded-xl bg-gdg-yellow blur-[10px]"
               />
-              <div className="js-rs-rcc relative flex h-full w-full flex-col items-center justify-center rounded-xl bg-gdg-yellow px-2 text-gdg-ink shadow-lift">
-                <span className="font-display text-base font-bold leading-none tracking-tight">
-                  RCC
-                </span>
-                <span className="mt-1 font-mono text-[8px] uppercase tracking-[0.16em]">
-                  Community college
-                </span>
+              <div className="js-rs-rcc relative flex h-full w-full items-center justify-center rounded-xl bg-gdg-yellow p-2 text-gdg-ink shadow-lift">
+                <BrandImage
+                  src={`${BASE}brand/rcc-horizontal.png`}
+                  alt="Riverside City College logo"
+                  className="max-h-[80%] max-w-[88%] object-contain"
+                  fallback={
+                    <div className="flex flex-col items-center justify-center">
+                      <span className="font-display text-base font-bold leading-none tracking-tight">
+                        RCC
+                      </span>
+                      <span className="mt-1 font-mono text-[8px] uppercase tracking-[0.16em]">
+                        Community college
+                      </span>
+                    </div>
+                  }
+                />
               </div>
             </div>
           ),
