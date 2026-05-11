@@ -11,8 +11,6 @@ import { SplitTitle } from "./SplitTitle";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const GOOGLE_COLORS = ["#4285F4", "#EA4335", "#FBBC04", "#34A853"];
-
 const PILLAR_HEX: Record<"blue" | "red" | "yellow" | "green", string> = {
   blue: "#4285F4",
   red: "#EA4335",
@@ -27,32 +25,37 @@ const PILLAR_TEXT: Record<"blue" | "red" | "yellow" | "green", string> = {
   green: "text-gdg-green",
 };
 
-const COLS = 13;
-const ROWS = 6;
-const DOT_R = 3;
-const DOT_GAP_X = 22;
-const DOT_GAP_Y = 22;
-const SVG_W = COLS * DOT_GAP_X;
-const SVG_H = ROWS * DOT_GAP_Y;
+/**
+ * Cinematic chapter grid: every dot is one of the 1,000+ GDG chapters.
+ * Riverside is highlighted as a single yellow, pulsing dot — concrete proof
+ * of scale rather than an abstract continent shape.
+ */
+const GRID_COLS = 40;
+const GRID_ROWS = 25;
+const GRID_TOTAL = GRID_COLS * GRID_ROWS; // exactly 1000
+const GRID_GAP = 14;
+const DOT_R = 1.6;
+const GRID_W = GRID_COLS * GRID_GAP;
+const GRID_H = GRID_ROWS * GRID_GAP;
 
-const CONTINENT_DOTS = new Set<number>([
-  1, 14, 15, 27, 28, 29, 41, 42, 54,
-  4, 5, 17, 18, 30, 31, 44, 57,
-  7, 8, 9, 20, 21, 22, 34, 35, 47,
-  49, 62,
-]);
+const RCC_COL = 7;
+const RCC_ROW = 15;
+const RCC_INDEX = RCC_ROW * GRID_COLS + RCC_COL;
+const rccCx = RCC_COL * GRID_GAP + GRID_GAP / 2;
+const rccCy = RCC_ROW * GRID_GAP + GRID_GAP / 2;
 
-const MV = { col: 1, row: 1 };
-const RVS = { col: 1, row: 2 };
+const COLOR_PALETTE = ["#4285F4", "#EA4335", "#FBBC04", "#34A853"];
 
-const dotPos = (col: number, row: number) => ({
-  cx: col * DOT_GAP_X + DOT_GAP_X / 2,
-  cy: row * DOT_GAP_Y + DOT_GAP_Y / 2,
-});
+const hashChannel = (i: number) => ((i * 2654435761) >>> 0) % 100;
 
-const mv = dotPos(MV.col, MV.row);
-const rvs = dotPos(RVS.col, RVS.row);
-const arcD = `M ${mv.cx} ${mv.cy} Q ${(mv.cx + rvs.cx) / 2 + 24} ${(mv.cy + rvs.cy) / 2} ${rvs.cx} ${rvs.cy}`;
+const dotColor = (i: number): string | null => {
+  const h = hashChannel(i);
+  if (h < 3) return COLOR_PALETTE[0];
+  if (h < 6) return COLOR_PALETTE[1];
+  if (h < 9) return COLOR_PALETTE[2];
+  if (h < 12) return COLOR_PALETTE[3];
+  return null;
+};
 
 export function WhatIsGDG() {
   const root = useRef<HTMLDivElement>(null);
@@ -77,12 +80,10 @@ export function WhatIsGDG() {
       gsap.set(".js-scale-stat", { autoAlpha: 0, y: 20 });
       gsap.set(".js-cities-band", { autoAlpha: 0 });
       gsap.set(".js-scale-glow", { autoAlpha: 0, scale: 0.6 });
-      gsap.set(".js-dot", { autoAlpha: 0, scale: 0 });
-      gsap.set(".js-arc", { strokeDasharray: 220, strokeDashoffset: 220 });
-      gsap.set(".js-mv-core", { autoAlpha: 0, scale: 0 });
-      gsap.set(".js-rvs-core", { autoAlpha: 0, scale: 0 });
-      gsap.set(".js-rvs-halo", { autoAlpha: 0, scale: 0 });
-      gsap.set(".js-map-label", { autoAlpha: 0, y: 8 });
+      gsap.set(".js-grid-dot", { autoAlpha: 0 });
+      gsap.set(".js-rcc-callout", { autoAlpha: 0 });
+      gsap.set(".js-rcc-halo", { autoAlpha: 0 });
+      gsap.set(".js-rcc-core", { autoAlpha: 0 });
       gsap.set(".js-handoff", { autoAlpha: 0, y: 18, filter: "blur(6px)" });
 
       gsap.set(".js-pillars-head", { autoAlpha: 0, y: 14 });
@@ -192,63 +193,34 @@ export function WhatIsGDG() {
               "-=0.3",
             )
             .to(
-              ".js-dot",
+              ".js-grid-dot",
               {
                 autoAlpha: 1,
-                scale: 1,
                 duration: reduced ? 0.01 : 0.5,
-                stagger: { each: reduced ? 0 : 0.008, from: "random" },
-                ease: "back.out(2)",
+                stagger: reduced
+                  ? 0
+                  : {
+                      amount: 1.6,
+                      grid: [GRID_ROWS, GRID_COLS],
+                      from: "center",
+                    },
+                ease: "power2.out",
               },
               "-=0.3",
             )
             .to(
-              ".js-arc",
-              {
-                strokeDashoffset: 0,
-                duration: reduced ? 0.01 : 1.1,
-                ease: "power2.inOut",
-              },
+              ".js-rcc-core",
+              { autoAlpha: 1, duration: reduced ? 0.01 : 0.4 },
               "-=0.4",
             )
             .to(
-              ".js-mv-core",
-              {
-                autoAlpha: 1,
-                scale: 1,
-                duration: reduced ? 0.01 : 0.4,
-                ease: "back.out(2.4)",
-              },
-              "-=0.9",
+              ".js-rcc-halo",
+              { autoAlpha: 0.7, duration: reduced ? 0.01 : 0.5 },
+              "-=0.3",
             )
             .to(
-              ".js-rvs-halo",
-              {
-                autoAlpha: 0.55,
-                scale: 1,
-                duration: reduced ? 0.01 : 0.6,
-                ease: "power2.out",
-              },
-              "-=0.25",
-            )
-            .to(
-              ".js-rvs-core",
-              {
-                autoAlpha: 1,
-                scale: 1,
-                duration: reduced ? 0.01 : 0.5,
-                ease: "back.out(2.8)",
-              },
-              "-=0.4",
-            )
-            .to(
-              ".js-map-label",
-              {
-                autoAlpha: 1,
-                y: 0,
-                duration: reduced ? 0.01 : 0.5,
-                stagger: reduced ? 0 : 0.1,
-              },
+              ".js-rcc-callout",
+              { autoAlpha: 1, duration: reduced ? 0.01 : 0.55 },
               "-=0.2",
             )
             .to(
@@ -298,14 +270,28 @@ export function WhatIsGDG() {
               ease: "none",
               transformOrigin: "50% 50%",
             });
-            // Continuous gentle pulse at Riverside node
-            gsap.to(".js-rvs-halo", {
-              scale: 1.6,
+            // Continuous halo pulse on the Riverside chapter dot
+            // Animate the SVG attribute `r` so the pulse expands around the
+            // circle's true center without relying on browser SVG
+            // transform-origin behavior.
+            gsap.to(".js-rcc-halo", {
+              attr: { r: DOT_R * 9 },
               autoAlpha: 0,
-              duration: 1.8,
+              duration: 1.9,
               repeat: -1,
               ease: "power2.out",
-              delay: 1.6,
+              delay: 1.8,
+            });
+
+            // Light, continuous twinkle on a few colored chapter dots
+            gsap.to(".js-grid-color", {
+              opacity: 0.55,
+              duration: 1.6,
+              ease: "sine.inOut",
+              repeat: -1,
+              yoyo: true,
+              stagger: { each: 0.04, from: "random" },
+              delay: 2.4,
             });
             // Marquee scroll
             const track = root.current?.querySelector<HTMLDivElement>(
@@ -531,10 +517,10 @@ export function WhatIsGDG() {
             <div className="js-scale-bignum mt-6 sm:mt-8">
               <span
                 ref={counterRef}
-                className="block font-display font-bold leading-[0.86] tabular-nums"
+                className="block whitespace-nowrap font-display font-bold leading-[0.86] tabular-nums"
                 style={{
-                  fontSize: "clamp(5.5rem, 32vw, 13rem)",
-                  letterSpacing: "-0.05em",
+                  fontSize: "clamp(3.75rem, 21vw, 11rem)",
+                  letterSpacing: "-0.06em",
                   backgroundImage:
                     "linear-gradient(135deg, #4285F4 0%, #34A853 32%, #FBBC04 64%, #EA4335 100%)",
                   WebkitBackgroundClip: "text",
@@ -639,89 +625,101 @@ export function WhatIsGDG() {
             </div>
           </div>
 
-          {/* Globe / arc map */}
-          <div className="relative mx-auto mt-14 max-w-xl">
+          {/* Chapter grid — every dot is one of 1,000+ chapters */}
+          <div className="relative mx-auto mt-14 w-full max-w-2xl">
+            <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.22em] text-white/45">
+              Every dot is a chapter
+            </p>
             <svg
-              viewBox={`0 0 ${SVG_W} ${SVG_H}`}
+              viewBox={`0 0 ${GRID_W} ${GRID_H}`}
               width="100%"
               height="auto"
               role="img"
-              aria-label="Stylized world dot grid showing the line from Mountain View to Riverside"
+              aria-label="A grid of one thousand dots, each representing one Google Developer Groups chapter, with Riverside City College highlighted in yellow"
               className="block"
+              preserveAspectRatio="xMidYMid meet"
             >
-              {Array.from({ length: COLS * ROWS }).map((_, i) => {
-                const col = i % COLS;
-                const row = Math.floor(i / COLS);
-                const { cx, cy } = dotPos(col, row);
-                const isLand = CONTINENT_DOTS.has(i);
-                const color = isLand
-                  ? GOOGLE_COLORS[(col + row) % GOOGLE_COLORS.length]
-                  : "rgba(255,255,255,0.10)";
+              {Array.from({ length: GRID_TOTAL }).map((_, i) => {
+                if (i === RCC_INDEX) return null;
+                const col = i % GRID_COLS;
+                const row = Math.floor(i / GRID_COLS);
+                const cx = col * GRID_GAP + GRID_GAP / 2;
+                const cy = row * GRID_GAP + GRID_GAP / 2;
+                const color = dotColor(i);
+                const isColored = color !== null;
                 return (
                   <circle
                     key={i}
-                    className="js-dot"
+                    className={`js-grid-dot${isColored ? " js-grid-color" : ""}`}
                     cx={cx}
                     cy={cy}
-                    r={isLand ? DOT_R : DOT_R * 0.55}
-                    fill={color}
+                    r={isColored ? DOT_R * 1.25 : DOT_R}
+                    fill={color ?? "rgba(255,255,255,0.22)"}
                   />
                 );
               })}
 
-              <path
-                className="js-arc"
-                d={arcD}
+              {/* RCC connecting line */}
+              <line
+                className="js-rcc-callout"
+                x1={rccCx}
+                y1={rccCy}
+                x2={rccCx + 26}
+                y2={rccCy - 18}
                 stroke="#FBBC04"
-                strokeWidth={1.4}
-                fill="none"
+                strokeWidth={0.6}
                 strokeLinecap="round"
               />
-
+              {/* RCC dot (halo + core) */}
               <circle
-                className="js-mv-core"
-                cx={mv.cx}
-                cy={mv.cy}
-                r={DOT_R + 1.6}
-                fill="#4285F4"
-              />
-
-              <circle
-                className="js-rvs-halo"
-                cx={rvs.cx}
-                cy={rvs.cy}
-                r={DOT_R + 5}
+                className="js-rcc-halo"
+                cx={rccCx}
+                cy={rccCy}
+                r={DOT_R * 5}
                 fill="none"
                 stroke="#FBBC04"
-                strokeWidth={1.4}
+                strokeWidth={1.1}
               />
               <circle
-                className="js-rvs-core"
-                cx={rvs.cx}
-                cy={rvs.cy}
-                r={DOT_R + 2.4}
+                className="js-rcc-core"
+                cx={rccCx}
+                cy={rccCy}
+                r={DOT_R * 2.4}
                 fill="#FBBC04"
               />
+              {/* RCC label (anchored inside SVG, scales with grid) */}
+              <g className="js-rcc-callout">
+                <text
+                  x={rccCx + 28}
+                  y={rccCy - 22}
+                  fill="#FBBC04"
+                  style={{
+                    fontFamily:
+                      "'JetBrains Mono', ui-monospace, SFMono-Regular, monospace",
+                    fontSize: 9,
+                    fontWeight: 600,
+                    letterSpacing: 1.4,
+                    textTransform: "uppercase",
+                  }}
+                >
+                  RCC · Riverside, CA
+                </text>
+                <text
+                  x={rccCx + 28}
+                  y={rccCy - 11}
+                  fill="rgba(255,255,255,0.65)"
+                  style={{
+                    fontFamily:
+                      "'JetBrains Mono', ui-monospace, SFMono-Regular, monospace",
+                    fontSize: 7,
+                    letterSpacing: 1,
+                    textTransform: "uppercase",
+                  }}
+                >
+                  1 of {GDG_FACTS.globalChaptersDisplay} chapters
+                </text>
+              </g>
             </svg>
-
-            <div className="mt-4 grid grid-cols-2 gap-3 px-1">
-              <div className="js-map-label">
-                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/55">
-                  Mountain View
-                </span>
-                <p className="mt-0.5 text-[11px] leading-snug text-white/75">
-                  Google HQ
-                </p>
-              </div>
-              <div className="js-map-label text-right">
-                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-gdg-yellow">
-                  Riverside
-                </span>
-                <p className="mt-0.5 text-[11px] leading-snug text-white/75">
-                  RCC chapter
-                </p>
-              </div>
-            </div>
           </div>
 
           <p className="js-handoff mx-auto mt-14 max-w-xl font-display text-3xl font-bold leading-[1.05] tracking-tight text-white sm:text-4xl">
