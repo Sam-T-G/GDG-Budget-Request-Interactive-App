@@ -74,7 +74,7 @@ export const RARE_SEAT = {
   bigStat: "1",
   bigStatLabel: "of 1,000+ chapters globally",
   body:
-    "Almost every chapter on the global GDG roster is a four-year university — Stanford, Berkeley, Yale, ETH Zurich, the state flagships. Community college chapters are the exception. RCC holds one of those seats.",
+    "Almost every chapter on the global GDG roster is a four-year university — Stanford, Berkeley, Yale, Michigan, the state flagships. Community college chapters are the exception. RCC holds one of those seats.",
   footnote: "The Inland Empire on a map dominated by university towns.",
   /**
    * Confirmed GDG on Campus chapters at notable universities — sourced
@@ -88,11 +88,11 @@ export const RARE_SEAT = {
     { name: "UCLA", short: "UCLA", file: "ucla.svg" },
     { name: "Yale University", short: "Yale", file: "yale.svg" },
     { name: "Columbia University", short: "Columbia", file: "columbia.svg" },
-    { name: "New York University", short: "NYU", file: "nyu.svg" },
-    { name: "ETH Zurich", short: "ETH", file: "eth-zurich.svg" },
+    { name: "University of Michigan", short: "Michigan", file: "michigan.svg" },
     { name: "Carnegie Mellon", short: "CMU", file: "carnegie-mellon.svg" },
+    { name: "New York University", short: "NYU", file: "nyu.svg" },
+    { name: "UT Austin", short: "UT Austin", file: "ut-austin.svg" },
     { name: "UC San Diego", short: "UCSD", file: "ucsd.svg" },
-    { name: "UC Santa Cruz", short: "UCSC", file: "uc-santa-cruz.svg" },
-    { name: "Cal Poly SLO", short: "Cal Poly", file: "cal-poly.svg" },
+    { name: "Purdue University", short: "Purdue", file: "purdue.svg" },
   ] as RareSeatPeer[],
 };
