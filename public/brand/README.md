@@ -45,16 +45,26 @@ The app gracefully falls back to typography-rendered tiles if any of these files
 
 Used by the `GoogleIO` section that closes the chapter highlights block. The component references these via `${BASE}brand/io/<file>`; each `<BrandImage>` has a Google-color gradient fallback, so missing files degrade gracefully.
 
-| Filename | Subject |
-|---|---|
-| `googleplex-campus.jpg` | Googleplex campus exterior |
-| `googleplex-androids.jpg` | Android lawn statues |
-| `googleplex-pond.jpg` | Googleplex pond / grounds |
-| `shoreline-exterior.jpg` | Shoreline Amphitheatre exterior |
-| `shoreline-io.jpg` | Shoreline during a prior Google I/O |
-| `io-keynote.jpg` | Google I/O keynote crowd |
+#### Speaker portraits
 
-These ship pre-compressed (`sips -Z 1200 ... --setProperty formatOptions 70`) from Wikimedia Commons contributors under CC BY-SA. The in-UI photo strip surfaces a `Photos courtesy of Wikimedia Commons contributors, CC BY-SA.` credit. If you swap in newer or chapter-captured photos, keep file widths ≤ 1200px and update `GOOGLE_IO.photos[].credit` in `src/data/budget.ts` to match the new attribution.
+| Filename | Subject | Source | License | Credit |
+|---|---|---|---|---|
+| `pichai.jpg` | Sundar Pichai, 2023 (cropped) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Sundar_Pichai_(2023)_cropped_2.jpg) | CC BY 4.0 | © European Union, 2023 · Lukasz Kobus |
+| `hassabis.jpg` | Demis Hassabis, 2025 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Demis_Hassabis_in_2025_by_Christopher_Michel.jpg) | CC BY-SA 4.0 | Christopher Michel |
+
+#### Event + venue photos (carousel)
+
+| Filename | Subject | Source | License | Credit |
+|---|---|---|---|---|
+| `io-pichai-keynote-2017.jpg` | Sundar Pichai on stage at Google I/O 2017 | [Wikimedia](https://commons.wikimedia.org/wiki/File:Sundar_Pichai_at_Google_IO_2017_Keynote.jpg) | CC BY-SA 4.0 | Steven Zimmerman |
+| `io-2016-keynote.jpg` | Google I/O 2016 keynote stage / crowd | [Wikimedia](https://commons.wikimedia.org/wiki/File:Google_IO_2016_Keynote_(26533672104).jpg) | CC BY 2.0 | btwashburn (Flickr) |
+| `shoreline-io.jpg` | Shoreline Amphitheatre during I/O 2016 | [Wikimedia](https://commons.wikimedia.org/wiki/File:Google_I-O_2016_at_Shoreline_Amphitheatre_(27047756466).jpg) | CC BY 2.0 | gilipollastv (Flickr) |
+| `io-2017-fireside.jpg` | Google I/O 2017 Android Fireside Chat | [Wikimedia](https://commons.wikimedia.org/wiki/File:Google_IO_2017_Android_Fireside_Chat.jpg) | CC BY-SA 4.0 | Steven Zimmerman |
+| `io-2019.jpg` | Google I/O 2019 branded venue | [Wikimedia](https://commons.wikimedia.org/wiki/File:Google_I-O_2019.jpg) | CC BY-SA 3.0 | Aleksandr Shcherbakov |
+| `googleplex-androids.jpg` | Android sculpture lawn at the Googleplex | Wikimedia Commons | CC BY-SA | Wikimedia contributors |
+| `googleplex-campus.jpg` | Googleplex main campus | Wikimedia Commons | CC BY-SA | Wikimedia contributors |
+
+Portrait files ship pre-compressed at max-width 800px; event photos at max-width 1400px (`sips -Z <px> --setProperty formatOptions 72`). If you swap in newer or chapter-captured photos, keep portrait widths ≤ 800px and event photo widths ≤ 1400px, then update `GOOGLE_IO.photos[].credit` (or `speakers[].photoCredit`) in `src/data/budget.ts` so the visible attribution matches the new source.
 
 ## Reference URLs
 

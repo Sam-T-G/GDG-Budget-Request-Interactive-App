@@ -225,6 +225,8 @@ export type IoSpeaker = {
   bullets: string[];
   initials: string;
   accent: GoogleColor;
+  photo?: string;
+  photoCredit?: string;
 };
 
 export const GOOGLE_IO = {
@@ -265,33 +267,33 @@ export const GOOGLE_IO = {
   ] as IoAttendee[],
   photos: [
     {
-      file: "shoreline-exterior.jpg",
-      caption: "Shoreline Amphitheatre · the I/O venue",
-      credit: "Wikimedia Commons",
+      file: "io-pichai-keynote-2017.jpg",
+      caption: "Sundar Pichai · Google I/O keynote",
+      credit: "S. Zimmerman · CC BY-SA",
     },
     {
-      file: "io-keynote.jpg",
-      caption: "Inside the I/O keynote",
-      credit: "Wikimedia Commons",
+      file: "io-2016-keynote.jpg",
+      caption: "Inside the keynote · Shoreline",
+      credit: "btwashburn · CC BY",
     },
     {
       file: "shoreline-io.jpg",
-      caption: "Google I/O · outside the venue",
-      credit: "Wikimedia Commons",
+      caption: "Shoreline Amphitheatre during I/O",
+      credit: "gilipollastv · CC BY",
+    },
+    {
+      file: "io-2017-fireside.jpg",
+      caption: "Fireside chat · Android sessions",
+      credit: "S. Zimmerman · CC BY-SA",
+    },
+    {
+      file: "io-2019.jpg",
+      caption: "Google I/O 2019 · branded venue",
+      credit: "A. Shcherbakov · CC BY-SA",
     },
     {
       file: "googleplex-androids.jpg",
       caption: "Android sculpture lawn · Googleplex",
-      credit: "Wikimedia Commons",
-    },
-    {
-      file: "googleplex-campus.jpg",
-      caption: "Googleplex main campus",
-      credit: "Wikimedia Commons",
-    },
-    {
-      file: "googleplex-pond.jpg",
-      caption: "Googleplex grounds",
       credit: "Wikimedia Commons",
     },
   ] as IoPhoto[],
@@ -304,6 +306,8 @@ export const GOOGLE_IO = {
       bullets: ["IIT Kharagpur · MS Stanford · MBA Wharton", "Keynoting Google I/O 2026"],
       initials: "SP",
       accent: "blue",
+      photo: "pichai.jpg",
+      photoCredit: "© European Union, 2023 · Lukasz Kobus · CC BY 4.0",
     },
     {
       name: "Sir Demis Hassabis",
@@ -315,10 +319,12 @@ export const GOOGLE_IO = {
       ],
       initials: "DH",
       accent: "red",
+      photo: "hassabis.jpg",
+      photoCredit: "Christopher Michel · CC BY-SA 4.0",
     },
   ] as IoSpeaker[],
   closing: "ASRCC funds the chapter. Google is funding the leaders.",
-  photoCredit: "Photos courtesy of Wikimedia Commons contributors, CC BY-SA.",
+  photoCredit: "Photos via Wikimedia Commons contributors under CC BY / CC BY-SA licenses. Individual credits noted per image.",
 };
 
 export const CLUB_FACTS = {

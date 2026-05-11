@@ -523,53 +523,91 @@ export function GoogleIO() {
               </h3>
             </div>
 
-            <div className="mt-10 space-y-5">
-              {GOOGLE_IO.speakers.map((s) => (
-                <article
-                  key={s.name}
-                  className="js-speaker-card overflow-hidden rounded-3xl bg-white/[0.06] ring-1 ring-white/10 backdrop-blur"
-                >
-                  <div className="flex items-start gap-4 p-5">
-                    <div
-                      className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-white shadow-lift"
-                      style={{
-                        background:
-                          s.accent === "blue"
-                            ? "linear-gradient(135deg, #4285F4, #34A853)"
-                            : "linear-gradient(135deg, #FBBC04, #EA4335)",
-                      }}
+            <div className="mt-10 space-y-6">
+              {GOOGLE_IO.speakers.map((s) => {
+                const avatarGradient =
+                  s.accent === "blue"
+                    ? "linear-gradient(135deg, #4285F4, #34A853)"
+                    : "linear-gradient(135deg, #FBBC04, #EA4335)";
+                return (
+                  <article
+                    key={s.name}
+                    className="js-speaker-card relative overflow-hidden rounded-3xl bg-white/[0.06] ring-1 ring-white/10 backdrop-blur"
+                  >
+                    <span
                       aria-hidden
-                    >
-                      <span className="font-display text-base font-bold tracking-wide">
-                        {s.initials}
-                      </span>
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h4 className="font-display text-xl font-bold leading-tight tracking-tight text-white">
-                        {s.name}
-                      </h4>
-                      <p
-                        className={`mt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] ${ACCENT_TEXT[s.accent]}`}
-                      >
-                        {s.title}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="border-t border-white/10 px-5 py-4">
-                    <p className="text-sm leading-relaxed text-white/80">{s.bio}</p>
-                    <ul className="mt-3 flex flex-wrap gap-2">
-                      {s.bullets.map((b) => (
-                        <li
-                          key={b}
-                          className="rounded-full bg-white/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-white/80"
+                      className="absolute left-0 right-0 top-0 z-10 h-1"
+                      style={{ background: avatarGradient }}
+                    />
+                    <div className="relative aspect-[5/4] overflow-hidden bg-gdg-ink">
+                      {s.photo ? (
+                        <BrandImage
+                          src={`${BASE}brand/io/${s.photo}`}
+                          alt={`Portrait of ${s.name}`}
+                          className="h-full w-full object-cover object-top"
+                          fallback={
+                            <div
+                              aria-hidden
+                              className="flex h-full w-full items-center justify-center"
+                              style={{ background: avatarGradient }}
+                            >
+                              <span className="font-display text-6xl font-bold tracking-tight text-white/90">
+                                {s.initials}
+                              </span>
+                            </div>
+                          }
+                        />
+                      ) : (
+                        <div
+                          aria-hidden
+                          className="flex h-full w-full items-center justify-center"
+                          style={{ background: avatarGradient }}
                         >
-                          {b}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </article>
-              ))}
+                          <span className="font-display text-6xl font-bold tracking-tight text-white/90">
+                            {s.initials}
+                          </span>
+                        </div>
+                      )}
+                      <div
+                        aria-hidden
+                        className="absolute inset-0"
+                        style={{
+                          background:
+                            "linear-gradient(180deg, transparent 30%, rgba(31,31,31,0.35) 65%, rgba(31,31,31,0.95) 100%)",
+                        }}
+                      />
+                      <div className="absolute bottom-0 left-0 right-0 p-5">
+                        <h4 className="font-display text-2xl font-bold leading-tight tracking-tight text-white sm:text-3xl">
+                          {s.name}
+                        </h4>
+                        <p
+                          className={`mt-1 font-mono text-[10px] uppercase tracking-[0.18em] ${ACCENT_TEXT[s.accent]}`}
+                        >
+                          {s.title}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="border-t border-white/10 px-5 py-5">
+                      <p className="text-sm leading-relaxed text-white/85">{s.bio}</p>
+                      <ul className="mt-4 flex flex-wrap gap-2">
+                        {s.bullets.map((b) => (
+                          <li
+                            key={b}
+                            className="rounded-full bg-white/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-white/80"
+                          >
+                            {b}
+                          </li>
+                        ))}
+                      </ul>
+                      {s.photoCredit && (
+                        <p className="mt-4 font-mono text-[9px] uppercase tracking-[0.14em] text-white/40">
+                          Photo · {s.photoCredit}
+                        </p>
+                      )}
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           </div>
         </div>
