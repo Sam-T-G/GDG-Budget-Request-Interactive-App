@@ -41,6 +41,21 @@ These are referenced by the Track Record section (transfer outcomes, hackathon w
 
 The app gracefully falls back to typography-rendered tiles if any of these files are missing — so it'll still look polished if you ship without them.
 
+### Google I/O 2026 photos (`public/brand/io/`)
+
+Used by the `GoogleIO` section that closes the chapter highlights block. The component references these via `${BASE}brand/io/<file>`; each `<BrandImage>` has a Google-color gradient fallback, so missing files degrade gracefully.
+
+| Filename | Subject |
+|---|---|
+| `googleplex-campus.jpg` | Googleplex campus exterior |
+| `googleplex-androids.jpg` | Android lawn statues |
+| `googleplex-pond.jpg` | Googleplex pond / grounds |
+| `shoreline-exterior.jpg` | Shoreline Amphitheatre exterior |
+| `shoreline-io.jpg` | Shoreline during a prior Google I/O |
+| `io-keynote.jpg` | Google I/O keynote crowd |
+
+These ship pre-compressed (`sips -Z 1200 ... --setProperty formatOptions 70`) from Wikimedia Commons contributors under CC BY-SA. The in-UI photo strip surfaces a `Photos courtesy of Wikimedia Commons contributors, CC BY-SA.` credit. If you swap in newer or chapter-captured photos, keep file widths ≤ 1200px and update `GOOGLE_IO.photos[].credit` in `src/data/budget.ts` to match the new attribution.
+
 ## Reference URLs
 
 - GDG community platform: <https://gdg.community.dev/>

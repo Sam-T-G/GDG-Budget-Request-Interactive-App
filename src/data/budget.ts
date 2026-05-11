@@ -215,6 +215,112 @@ export const GOOGLE_MATCH = {
   shortLabel: "Doubled by Google",
 };
 
+export type IoCoverage = { title: string; detail: string; color: GoogleColor };
+export type IoAttendee = { name: string; role: string; initials: string };
+export type IoPhoto = { file: string; caption: string; credit: string };
+export type IoSpeaker = {
+  name: string;
+  title: string;
+  bio: string;
+  bullets: string[];
+  initials: string;
+  accent: GoogleColor;
+};
+
+export const GOOGLE_IO = {
+  eyebrow: "Direct Google investment",
+  display: { brand: "Google", mark: "I/O", year: "2026" },
+  dates: "May 19–20, 2026",
+  week: "Full week on the ground · May 18–22, 2026",
+  venue: "Shoreline Amphitheatre · Mountain View, CA",
+  hook: {
+    headline: "Two seats. Full week. On Google.",
+    body: "Google is flying our president and vice president to Google I/O for a dedicated week of training, networking, and exclusive event access. Travel, lodging, meals, and chapter resources — every cost covered by Google. Zero ASRCC dollars touch this.",
+  },
+  coverage: [
+    {
+      title: "Travel",
+      detail: "Round-trip flights to the Bay Area, covered.",
+      color: "blue",
+    },
+    {
+      title: "Lodging",
+      detail: "Hotel near the Googleplex, full week.",
+      color: "red",
+    },
+    {
+      title: "Meals",
+      detail: "Daily catering and on-site dining at I/O.",
+      color: "yellow",
+    },
+    {
+      title: "Chapter resources",
+      detail: "Training kits, swag, and materials shipped back for the entire chapter.",
+      color: "green",
+    },
+  ] as IoCoverage[],
+  attendees: [
+    { name: "Sam Gerungan", role: "President · GDG @ RCC", initials: "SG" },
+    { name: "Keisha Coleen Wagas", role: "Vice President · GDG @ RCC", initials: "KW" },
+  ] as IoAttendee[],
+  photos: [
+    {
+      file: "shoreline-exterior.jpg",
+      caption: "Shoreline Amphitheatre · the I/O venue",
+      credit: "Wikimedia Commons",
+    },
+    {
+      file: "io-keynote.jpg",
+      caption: "Inside the I/O keynote",
+      credit: "Wikimedia Commons",
+    },
+    {
+      file: "shoreline-io.jpg",
+      caption: "Google I/O · outside the venue",
+      credit: "Wikimedia Commons",
+    },
+    {
+      file: "googleplex-androids.jpg",
+      caption: "Android sculpture lawn · Googleplex",
+      credit: "Wikimedia Commons",
+    },
+    {
+      file: "googleplex-campus.jpg",
+      caption: "Googleplex main campus",
+      credit: "Wikimedia Commons",
+    },
+    {
+      file: "googleplex-pond.jpg",
+      caption: "Googleplex grounds",
+      credit: "Wikimedia Commons",
+    },
+  ] as IoPhoto[],
+  speakersHeadline: "In the room with.",
+  speakers: [
+    {
+      name: "Sundar Pichai",
+      title: "CEO · Google & Alphabet",
+      bio: "Joined Google in 2004. Led Chrome, ChromeOS, and Android before becoming CEO of Google in 2015 and CEO of Alphabet in 2019. Born in Madurai, India. Driving Google's AI-first transformation across every product surface.",
+      bullets: ["IIT Kharagpur · MS Stanford · MBA Wharton", "Keynoting Google I/O 2026"],
+      initials: "SP",
+      accent: "blue",
+    },
+    {
+      name: "Sir Demis Hassabis",
+      title: "CEO · Google DeepMind",
+      bio: "Co-founder of DeepMind (2010). Led the team behind AlphaFold, which predicted the 3D structure of every protein known to science. Awarded the 2024 Nobel Prize in Chemistry and knighted that year for contributions to AI.",
+      bullets: [
+        "Nobel Laureate · Chemistry 2024",
+        "TIME 2025 Person of the Year · Architects of AI",
+      ],
+      initials: "DH",
+      accent: "red",
+    },
+  ] as IoSpeaker[],
+  closing: "ASRCC funds the chapter. Google is funding the leaders.",
+  photoCredit: "Photos courtesy of Wikimedia Commons contributors, CC BY-SA.",
+};
+
 export const CLUB_FACTS = {
   name: "Google Developer Group on Campus at Riverside City College",
   shortName: "GDG @ RCC",

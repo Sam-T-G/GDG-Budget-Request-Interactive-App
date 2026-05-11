@@ -4,6 +4,7 @@ import { Mission } from "./components/Mission";
 import { TheAsk } from "./components/TheAsk";
 import { Impact } from "./components/Impact";
 import { Accomplishments } from "./components/Accomplishments";
+import { GoogleIO } from "./components/GoogleIO";
 import { WhyASRCC } from "./components/WhyASRCC";
 import { QandA } from "./components/QandA";
 import { ProgressDots } from "./components/ProgressDots";
@@ -38,6 +39,7 @@ export default function App() {
         <Mission />
         <Impact />
         <Accomplishments />
+        <GoogleIO />
         <Marquee items={PROGRAM_MARQUEE} bgClassName="bg-white" textClassName="text-gdg-ink" />
         <TheAsk />
         <Marquee items={STATS_MARQUEE} bgClassName="bg-gdg-ink" textClassName="text-white" duration={36} />

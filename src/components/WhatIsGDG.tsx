@@ -530,7 +530,7 @@ export function WhatIsGDG() {
                   Mountain View
                 </span>
                 <p className="mt-0.5 text-[11px] leading-snug text-white/75">
-                  Google HQ · the source
+                  Google HQ
                 </p>
               </div>
               <div className="js-map-label text-right">
@@ -538,7 +538,7 @@ export function WhatIsGDG() {
                   Riverside
                 </span>
                 <p className="mt-0.5 text-[11px] leading-snug text-white/75">
-                  RCC · the seat
+                  RCC chapter
                 </p>
               </div>
             </div>
