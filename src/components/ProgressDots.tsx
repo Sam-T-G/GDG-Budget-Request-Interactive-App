@@ -5,9 +5,9 @@ const SECTIONS = [
   { id: "hero", label: "Top", color: "#1F1F1F" },
   { id: "about-gdg", label: "About GDG", color: "#4285F4" },
   { id: "mission", label: "Our Chapter", color: "#34A853" },
-  { id: "ask", label: "The Ask", color: "#EA4335" },
   { id: "impact", label: "Impact", color: "#FBBC04" },
   { id: "accomplishments", label: "Track Record", color: "#4285F4" },
+  { id: "ask", label: "The Ask", color: "#EA4335" },
   { id: "why", label: "Why ASRCC", color: "#34A853" },
   { id: "qa", label: "Q & A", color: "#EA4335" },
 ];

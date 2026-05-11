@@ -10,12 +10,12 @@ const POINTS = [
   {
     color: "#4285F4",
     title: "Verbal acknowledgement",
-    body: "ASRCC is named at the open and close of every event — in person and on Bevy live-streams.",
+    body: "ASRCC is named at the open and close of every event, in person and on Bevy live-streams.",
   },
   {
     color: "#EA4335",
     title: "Logo on every flyer",
-    body: "ASRCC logo placement on all digital and print marketing — flyers, social graphics, event pages.",
+    body: "ASRCC logo placement on all digital and print marketing: flyers, social graphics, event pages.",
   },
   {
     color: "#FBBC04",

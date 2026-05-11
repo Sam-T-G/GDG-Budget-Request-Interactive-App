@@ -35,12 +35,12 @@ export default function App() {
         <Hero />
         <Marquee items={STATS_MARQUEE} bgClassName="bg-gdg-ink" textClassName="text-white" />
         <WhatIsGDG />
-        <Marquee items={PROGRAM_MARQUEE} bgClassName="bg-white" textClassName="text-gdg-ink" />
         <Mission />
-        <TheAsk />
-        <Marquee items={STATS_MARQUEE} bgClassName="bg-gdg-ink" textClassName="text-white" duration={36} />
         <Impact />
         <Accomplishments />
+        <Marquee items={PROGRAM_MARQUEE} bgClassName="bg-white" textClassName="text-gdg-ink" />
+        <TheAsk />
+        <Marquee items={STATS_MARQUEE} bgClassName="bg-gdg-ink" textClassName="text-white" duration={36} />
         <WhyASRCC />
         <QandA />
       </main>

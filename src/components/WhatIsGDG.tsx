@@ -311,7 +311,7 @@ export function WhatIsGDG() {
             <p className="mt-1 text-sm leading-relaxed text-gdg-ink">
               Most GDG chapters serve developers.{" "}
               <span className="font-semibold">
-                Ours goes further — we forge world-class professionals
+                Ours goes further. We forge world-class professionals
               </span>
               , across every discipline at RCC.
             </p>

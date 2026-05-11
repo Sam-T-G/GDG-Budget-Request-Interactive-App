@@ -54,7 +54,7 @@ export const LINE_ITEMS: LineItem[] = [
     overview:
       "Bring Google engineers and certified speakers directly to RCC to run hands-on workshops and certification prep. Students earn industry credentials without leaving campus.",
     outcome:
-      "Attendees leave with a personalized professional development roadmap and concrete strategies for building a standout digital presence — backed by Google certifications.",
+      "Attendees leave with a personalized professional development roadmap and concrete strategies for building a standout digital presence, backed by Google certifications.",
     expenses: [
       {
         label: "Speaker airfare",
@@ -169,7 +169,7 @@ export const LINE_ITEMS: LineItem[] = [
       "Functional projects for portfolios, hands-on mastery of Google tooling, and direct connections with industry mentors and recruiters.",
     expenses: [
       {
-        label: "Catering — meals + coffee",
+        label: "Catering · meals + coffee",
         amount: 1500,
         color: "yellow",
         math: "100 pax × ~$15 (MLH organizer bench)",
@@ -211,7 +211,7 @@ export const GOOGLE_MATCH = {
   eyebrow: "Google match",
   headline: "Every dollar ASRCC funds, Google matches.",
   detail:
-    "Google's GDG on Campus program matches chapter funding directly. Whatever ASRCC awards is doubled — often more — by Google. The $12,000 ask becomes $24,000+ in real budget on the ground.",
+    "Google's GDG on Campus program matches chapter funding directly. Whatever ASRCC awards is doubled (often more) by Google. The $12,000 ask becomes $24,000+ in real budget on the ground.",
   shortLabel: "Doubled by Google",
 };
 
@@ -230,7 +230,7 @@ export const CLUB_FACTS = {
   onCampusPercent: 90,
   attendanceRccStudents: 95,
   attendanceFacultyStaff: 5,
-  attendanceTracking: "Bevy — Google's official platform, with live-stream + recording access",
+  attendanceTracking: "Bevy, Google's official platform, with live-stream and recording access",
   fundraiserPercent: 0,
   trustBalance: 0,
   priorAsrccFunding: false,
@@ -238,9 +238,9 @@ export const CLUB_FACTS = {
   hearingWindow: "May 11–13, 2026 · 9 AM – 4 PM",
 };
 
-export const MISSION_PITCH = `GDG chapters worldwide serve developers. Ours goes further — we forge world-class professionals. Tech and the startup model are the vessel; what we actually build is self-confidence, soft skills, and the qualities that translate to every career. Our members hail from biology, business, humanities, engineering, computer science, and beyond.`;
+export const MISSION_PITCH = `GDG chapters worldwide serve developers. Ours goes further. We forge world-class professionals. Tech and the startup model are the vessel. What we actually build is self-confidence, soft skills, and the qualities that translate to every career. Our members hail from biology, business, humanities, engineering, computer science, and beyond.`;
 
-export const VESSEL_STATEMENT = `We focus on professional development — building self-confidence, soft skills, and the universal qualities that matter in any career. Tech and the startup model are the vessel; the skills travel everywhere.`;
+export const VESSEL_STATEMENT = `We focus on professional development. We build self-confidence, soft skills, and the universal qualities that matter in any career. Tech and the startup model are the vessel. The skills travel everywhere.`;
 
 export const DISCIPLINES: { name: string; color: "blue" | "red" | "yellow" | "green" }[] = [
   { name: "Biology", color: "green" },
@@ -276,11 +276,11 @@ export const ACCOMPLISHMENTS = {
     program: "Computer Science",
     transferRate: "2%",
     transferRateDetail:
-      "One of the most impacted majors at any UC — transfer admit rate hovers around two percent.",
+      "One of the most impacted majors at any UC. Transfer admit rate hovers around two percent.",
     eecs: {
       count: 1,
       label: "Electrical Engineering & Computer Sciences",
-      claim: "#2 in the nation — on par with Stanford, second only to MIT.",
+      claim: "#2 in the nation. On par with Stanford, second only to MIT.",
     },
     schoolLogo: {
       name: "UC Berkeley",
@@ -292,7 +292,7 @@ export const ACCOMPLISHMENTS = {
       eyebrow: "Not just Berkeley",
       lede: "Our members got into top schools across the board.",
       detail:
-        "Beyond the three Berkeley commits, GDG members earned admits to UCLA, USC, UCSD, and UC Irvine — several into majors with under 10% acceptance rates.",
+        "Beyond the three Berkeley commits, GDG members earned admits to UCLA, USC, UCSD, and UC Irvine. Several into majors with under 10% acceptance rates.",
       schools: [
         { name: "UCLA", file: "ucla.svg", short: "UCLA", accent: "blue" },
         { name: "USC", file: "usc.svg", short: "USC", accent: "red" },
@@ -305,12 +305,12 @@ export const ACCOMPLISHMENTS = {
     place: "1st",
     placeLabel: "overall",
     eventName: "Citrushack",
-    eventTagline: "An internal GDG team — fully RCC — swept first place.",
+    eventTagline: "An internal GDG team, fully RCC, swept first place.",
     detail:
       "A community-college team out-built squads from UCLA, UC Irvine, and UC Riverside in a 24-hour sprint.",
     photo: "photos/citrushack-team.jpg",
     photoAlt:
-      "GDG @ RCC team mid-build at Citrushack — laptops open, breadboards and components spread across the table.",
+      "GDG @ RCC team mid-build at Citrushack. Laptops open, breadboards and components spread across the table.",
     photoCredit: "Major League Hacking",
     schoolsBeaten: [
       { name: "UCLA", file: "ucla.svg", short: "UCLA", accent: "blue" },
@@ -339,17 +339,17 @@ export const QA_ITEMS: { question: string; answer: string }[] = [
   {
     question: "How do you measure impact?",
     answer:
-      "Every event runs through Bevy, Google's attendance and live-stream platform. We track sign-ups, check-ins, and live-stream views per event. Currently 90% of our 20+ annual events are on-campus, drawing members across six+ disciplines — humanities, biology, business, engineering, communications, and computer science.",
+      "Every event runs through Bevy, Google's attendance and live-stream platform. We track sign-ups, check-ins, and live-stream views per event. Currently 90% of our 20+ annual events are on-campus, drawing members across six+ disciplines: humanities, biology, business, engineering, communications, and computer science.",
   },
   {
     question: "How do you acknowledge ASRCC?",
     answer:
-      "Verbal acknowledgement at the open and close of every event, ASRCC logo placement on flyers and social graphics, and explicit credit on the GDG Bevy event pages — which are indexed by Google's developer community globally.",
+      "Verbal acknowledgement at the open and close of every event, ASRCC logo placement on flyers and social graphics, and explicit credit on the GDG Bevy event pages. Those pages are indexed by Google's developer community globally.",
   },
   {
     question: "Why does the Silicon Valley trip cost $7,500 for 10 students?",
     answer:
-      "It's the highest-leverage event on the slate per student. The cost covers travel, lodging, ground transport, and meals for a multi-day Googleplex / Stanford / SJSU visit. These ten students return as recruiters, mentors, and transfer applicants — multiplying the impact across the chapter.",
+      "It's the highest-leverage event on the slate per student. The cost covers travel, lodging, ground transport, and meals for a multi-day Googleplex / Stanford / SJSU visit. These ten students return as recruiters, mentors, and transfer applicants, multiplying the impact across the chapter.",
   },
   {
     question: "Does Google contribute anything financially?",
@@ -359,11 +359,11 @@ export const QA_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Does the club raise its own funds?",
     answer:
-      "Yes. GDG @ RCC raises money by participating in Google events and taking on real-world projects from companies and entities tied to the Google Developer ecosystem. Those engagements bring in stipends and project revenue that grow alongside the chapter's portfolio — independent of ASRCC and the Google match.",
+      "Yes. GDG @ RCC raises money by participating in Google events and taking on real-world projects from companies and entities tied to the Google Developer ecosystem. Those engagements bring in stipends and project revenue that grow alongside the chapter's portfolio, independent of ASRCC and the Google match.",
   },
   {
     question: "What happens if you receive partial funding?",
     answer:
-      "We prioritize in this order: (1) Hackathon — broadest reach at $2,500 for 100+ students, (2) Speakers & Workshops — recurring on-campus value at $2,000 for 50+ students, (3) Silicon Valley trip — highest individual impact at $7,500 for 10 students. Anything not funded by ASRCC goes to the Senate request in August.",
+      "We prioritize in this order. (1) Hackathon: broadest reach at $2,500 for 100+ students. (2) Speakers & Workshops: recurring on-campus value at $2,000 for 50+ students. (3) Silicon Valley trip: highest individual impact at $7,500 for 10 students. Anything not funded by ASRCC goes to the Senate request in August.",
   },
 ];

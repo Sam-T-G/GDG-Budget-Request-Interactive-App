@@ -322,7 +322,7 @@ export function Accomplishments() {
   return (
     <SectionShell
       id="accomplishments"
-      chapter={{ number: "05", label: "Track Record" }}
+      chapter={{ number: "04", label: "Track Record" }}
       title="Where our members are going."
       tint="blue"
     >

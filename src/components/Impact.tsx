@@ -89,7 +89,7 @@ export function Impact() {
   return (
     <SectionShell
       id="impact"
-      chapter={{ number: "04", label: "Impact" }}
+      chapter={{ number: "03", label: "Impact" }}
       title="Tech is the vessel."
       tint="yellow"
     >
@@ -124,7 +124,7 @@ export function Impact() {
             ))}
           </div>
           <p className="mt-2 text-xs leading-relaxed text-gdg-mute">
-            Not just CS. Humanities, biology, business — the skills travel anywhere.
+            Not just CS. Humanities, biology, business. The skills travel anywhere.
           </p>
         </div>
 

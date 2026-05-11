@@ -12,13 +12,13 @@ export const GDG_FACTS = {
   plainSummary:
     "GDG is a career-development club, backed by Google. Students learn real industry tools, earn certifications, and connect with engineers who hire.",
   // One-line purpose for the hero / pull-quote use.
-  purposeLine: "Career development for students — backed by Google.",
+  purposeLine: "Career development for students, backed by Google.",
   // Direct quote from developers.google.com/community/gdg (kept for attribution).
   officialDescription:
     "Google Developer Groups (GDGs) bring together developers and technologists to connect, learn, and grow alongside Google's technologies and experts.",
   // Plain-language chapter purpose (replaces verbose official copy in-app).
   onCampusDescription:
-    "GDG on Campus chapters give college students hands-on training in the tools tech companies actually use — and a direct line to Google's global network of engineers.",
+    "GDG on Campus chapters give college students hands-on training in the tools tech companies actually use, plus a direct line to Google's global network of engineers.",
   globalChapters: 1000,
   globalChaptersDisplay: "1,000+",
   globalCountries: 140,
@@ -34,7 +34,7 @@ export const GDG_PILLARS: { title: string; body: string; color: "blue" | "red" |
   },
   {
     title: "Learn",
-    body: "Hands-on training in the tools tech companies use — taught by certified instructors.",
+    body: "Hands-on training in the tools tech companies use, taught by certified instructors.",
     color: "red",
   },
   {
@@ -74,7 +74,7 @@ export const RARE_SEAT = {
   bigStat: "1",
   bigStatLabel: "of 1,000+ chapters globally",
   body:
-    "Almost every chapter on the global GDG roster is a four-year university — Stanford, Berkeley, Yale, Michigan, the state flagships. Community college chapters are the exception. RCC holds one of those seats.",
+    "Almost every chapter on the global GDG roster is a four-year university: Stanford, Berkeley, Yale, Michigan, the state flagships. Community college chapters are the exception. RCC holds one of those seats.",
   footnote: "The Inland Empire on a map dominated by university towns.",
   /**
    * Confirmed GDG on Campus chapters at notable universities — sourced
