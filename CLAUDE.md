@@ -55,3 +55,8 @@ An interactive, mobile-native, **self-paced** webpage that supports a 15-minute 
 - [`docs/decisions.md`](docs/decisions.md) — running decision log (ADR-lite)
 - [`src/data/budget.ts`](src/data/budget.ts) — all hearing content
 - [`ASRCC-Funding-Request 26_27 GDG.pdf`](ASRCC-Funding-Request%2026_27%20GDG.pdf) — original budget submission (source of truth for numbers)
+
+## Working with AI here
+
+- The numbers are load-bearing. This page argues for $12,000 of real money in a live hearing, and every figure must trace to `src/data/budget.ts`, `src/data/gdg.ts`, or the original ASRCC PDF. An agent will happily produce a confident dollar amount, line item, or GDG stat that is wrong. Never let a generated figure ship without checking it against source.
+- The 20% that matters is correctness and feel, not scaffolding. `prefers-reduced-motion` short-circuits, thumb-reach on a 375px viewport, and golden-path scroll and tap behavior are not caught by `npm run build`. The phone walk-through is the verification step, not a formality: do it before reporting a UI change done.
