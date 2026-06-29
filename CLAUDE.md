@@ -58,5 +58,5 @@ An interactive, mobile-native, **self-paced** webpage that supports a 15-minute 
 
 ## Working with AI here
 
-- The numbers are load-bearing. This page argues for $12,000 of real money in a live hearing, and every figure must trace to `src/data/budget.ts`, `src/data/gdg.ts`, or the original ASRCC PDF. An agent will happily produce a confident dollar amount, line item, or GDG stat that is wrong. Never let a generated figure ship without checking it against source.
-- The 20% that matters is correctness and feel, not scaffolding. `prefers-reduced-motion` short-circuits, thumb-reach on a 375px viewport, and golden-path scroll and tap behavior are not caught by `npm run build`. The phone walk-through is the verification step, not a formality: do it before reporting a UI change done.
+- The numbers are load-bearing: this page argues for $12,000 in a live hearing. Every dollar amount, line item, or GDG stat must trace to `src/data/budget.ts`, `src/data/gdg.ts`, or the original ASRCC PDF before it ships.
+- The seams `npm run build` misses are `prefers-reduced-motion` short-circuits, thumb-reach on a 375px viewport, and golden-path scroll and tap behavior. The phone walk-through is the verification step for any UI change.
